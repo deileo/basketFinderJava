@@ -1,0 +1,19 @@
+version: '2.0'
+services:
+  mysql:
+    image: bitnami/mysql:5.7
+    networks:
+      - app-tier
+    ports:
+      - 3310:3306
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - MYSQL_DATABASE=basketFinder
+      - MYSQL_USER=basketFinder
+      - MYSQL_PASSWORD=basketFinder
+      - MYSQL_ROOT_PASSWORD=mysecretpw
+      - MYSQL_PORT=3306
+
+networks:
+  app-tier:
+    driver: bridge
