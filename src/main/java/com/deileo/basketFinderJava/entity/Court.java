@@ -23,10 +23,10 @@ public class Court {
     private String description;
 
     @Column(scale = 6, nullable = false)
-    private Float lat;
+    private Double lat;
 
     @Column(scale = 6, nullable = false)
-    private Float lng;
+    private Double lng;
 
     @Column(nullable = false)
     private Boolean isEnabled = false;
@@ -38,7 +38,7 @@ public class Court {
     private Integer renovationYear;
 
     @Column()
-    private String condition;
+    private String conditions;
 
     public Integer getId() {
         return id;
@@ -80,19 +80,19 @@ public class Court {
         this.description = description;
     }
 
-    public Float getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(Float lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
-    public Float getLng() {
+    public Double getLng() {
         return lng;
     }
 
-    public void setLng(Float lng) {
+    public void setLng(Double lng) {
         this.lng = lng;
     }
 
@@ -120,11 +120,11 @@ public class Court {
         this.renovationYear = renovationYear;
     }
 
-    public String getCondition() {
-        return condition;
+    public String getConditions() {
+        return conditions;
     }
 
-    public void setCondition(String condition) {
-        this.condition = condition;
+    public void setConditions(String conditions) {
+        this.conditions = conditions;
     }
 }
