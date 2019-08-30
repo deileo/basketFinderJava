@@ -19,11 +19,13 @@ public class CourtController {
     }
 
     @GetMapping("/public")
+    @ResponseBody
     public List<Court> getPublicCourts() {
         return courtService.getCourtsByType(Court.TYPE_PUBLIC);
     }
 
     @GetMapping("/private")
+    @ResponseBody
     public List<Court> getPrivateCourts() {
         return courtService.getCourtsByType(Court.TYPE_PRIVATE);
     }

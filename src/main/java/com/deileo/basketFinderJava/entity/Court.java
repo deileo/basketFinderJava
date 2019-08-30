@@ -1,6 +1,8 @@
 package com.deileo.basketFinderJava.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="courts")
@@ -38,10 +40,16 @@ public class Court {
 
     @Column(nullable = false, length = 7)
     private String type;
+//
+    @OneToMany(mappedBy = "court")
+    private List<Event> events;
 
-    public Court() {}
+    public Court() {
+        this.events = new ArrayList<Event>();
+    }
 
     public Court(String type) {
+        this.events = new ArrayList<Event>();
         this.type = type;
     }
 
@@ -119,5 +127,20 @@ public class Court {
 
     public String getType() {
         return type;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void addEvent(Event event) {
+        if (!this.events.contains(event)) {
+            event.setCourt(this);
+            this.events.add(event);
+        }
+    }
+
+    public void removeEvent(Event event) {
+        this.events.remove(event);
     }
 }
