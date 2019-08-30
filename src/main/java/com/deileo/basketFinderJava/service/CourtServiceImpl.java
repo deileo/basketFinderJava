@@ -45,4 +45,9 @@ public class CourtServiceImpl implements CourtService {
         courtRepo.delete(court);
     }
 
+    @Override
+    @Transactional
+    public List<Court> getCourtsByType(String type) {
+        return courtRepo.getCourtsByType(type);
+    }
 }

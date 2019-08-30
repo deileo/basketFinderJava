@@ -4,7 +4,6 @@ import com.deileo.basketFinderJava.entity.Court;
 import com.deileo.basketFinderJava.service.CourtService;
 import com.google.maps.errors.ApiException;
 import org.springframework.stereotype.Service;
-
 import java.io.FileReader;
 import java.io.IOException;
 

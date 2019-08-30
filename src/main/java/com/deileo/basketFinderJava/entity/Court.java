@@ -5,6 +5,8 @@ import javax.persistence.*;
 @Entity
 @Table(name="courts")
 public class Court {
+    public static final String TYPE_PRIVATE = "private";
+    public static final String TYPE_PUBLIC = "public";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +36,14 @@ public class Court {
     @Column(nullable = false)
     private Boolean isNew = false;
 
-    @Column()
-    private Integer renovationYear;
+    @Column(nullable = false, length = 7)
+    private String type;
 
-    @Column()
-    private String conditions;
+    public Court() {}
+
+    public Court(String type) {
+        this.type = type;
+    }
 
     public Integer getId() {
         return id;
@@ -112,19 +117,7 @@ public class Court {
         isNew = aNew;
     }
 
-    public Integer getRenovationYear() {
-        return renovationYear;
-    }
-
-    public void setRenovationYear(Integer renovationYear) {
-        this.renovationYear = renovationYear;
-    }
-
-    public String getConditions() {
-        return conditions;
-    }
-
-    public void setConditions(String conditions) {
-        this.conditions = conditions;
+    public String getType() {
+        return type;
     }
 }

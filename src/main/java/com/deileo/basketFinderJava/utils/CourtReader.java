@@ -15,6 +15,7 @@ import java.util.List;
 
 @Service
 public class CourtReader {
+    private static final String TYPE_GYM_COURT = "Vidaus";
 
     private GeoCoderService geoCoderService;
 
@@ -44,7 +45,7 @@ public class CourtReader {
         CSVReader courtReader = this.getReader(reader);
 
         while ((row = courtReader.readNext()) != null) {
-            if (row.length > 1 && row[1].equals("Vidaus")) {
+            if (row.length > 1 && row[1].equals(TYPE_GYM_COURT)) {
                 LatLng geocode = geoCoderService.getGeoLocationByAddress(row[4]);
                 if (geocode != null) {
                     courts.add(this.createGymCourt(row, geocode));
@@ -63,7 +64,7 @@ public class CourtReader {
     }
 
     private Court createPublicCourt(String[] row, LatLng geocode) {
-        Court court = new Court();
+        Court court = new Court(Court.TYPE_PUBLIC);
         court.setLocation(row[1]);
         court.setAddress(row[2]);
         court.setName(row[2]);
@@ -75,12 +76,11 @@ public class CourtReader {
     }
 
     private Court createGymCourt(String[] row, LatLng geocode) {
-        Court court = new Court();
+        Court court = new Court(Court.TYPE_PRIVATE);
         court.setLocation(row[0]);
         court.setName(row[3]);
         court.setAddress(row[4]);
         court.setDescription(row[7]);
-        court.setRenovationYear(Integer.parseInt(row[8].substring(0, 4)));
         court.setLat(geocode.lat);
         court.setLng(geocode.lng);
 

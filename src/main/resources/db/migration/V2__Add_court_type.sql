@@ -1,0 +1,1 @@
+ALTER TABLE courts ADD type VARCHAR(7) NOT NULL, DROP renovation_year, DROP conditions;

@@ -13,4 +13,6 @@ public interface CourtService {
     public void save(Court court);
 
     public void delete(Court court);
+
+    public List<Court> getCourtsByType(String type);
 }

@@ -18,9 +18,14 @@ public class CourtController {
         this.courtService = courtService;
     }
 
-    @GetMapping()
-    public List<Court> getCourts() {
-        return courtService.findAll();
+    @GetMapping("/public")
+    public List<Court> getPublicCourts() {
+        return courtService.getCourtsByType(Court.TYPE_PUBLIC);
+    }
+
+    @GetMapping("/private")
+    public List<Court> getPrivateCourts() {
+        return courtService.getCourtsByType(Court.TYPE_PRIVATE);
     }
 
     @GetMapping("/{id}")
