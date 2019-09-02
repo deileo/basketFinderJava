@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CourtServiceImpl implements CourtService {
 
     private CourtRepository courtRepo;
@@ -20,13 +21,11 @@ public class CourtServiceImpl implements CourtService {
     }
 
     @Override
-    @Transactional
     public List<Court> findAll() {
         return courtRepo.findAll();
     }
 
     @Override
-    @Transactional
     public Court find(Integer id) {
         Optional<Court> court = courtRepo.findById(id);
 
@@ -34,7 +33,6 @@ public class CourtServiceImpl implements CourtService {
     }
 
     @Override
-    @Transactional
     public void save(Court court) {
         courtRepo.save(court);
     }
@@ -46,7 +44,6 @@ public class CourtServiceImpl implements CourtService {
     }
 
     @Override
-    @Transactional
     public List<Court> getCourtsByType(String type) {
         return courtRepo.getCourtsByType(type);
     }

@@ -1,6 +1,10 @@
 package com.deileo.basketFinderJava.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,25 +16,36 @@ public class Event {
     private Integer id;
 
     @Column(nullable = false)
+    @NotBlank
     private String name;
 
     @Column(nullable = false)
+    @NotNull
+    @Positive
     private Integer neededPlayers = 0;
 
     @Column()
     private String description;
 
     @Column(scale = 2)
+    @PositiveOrZero
     private Double price = 0.0;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @NotNull
+    @FutureOrPresent
     private LocalDateTime startTime;
 
     @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @NotNull
+    @FutureOrPresent
     private LocalDateTime endTime;
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @NotNull
     private Court court;
 
     public Integer getId() {
@@ -91,5 +106,11 @@ public class Event {
 
     public void setCourt(Court court) {
         this.court = court;
+    }
+
+    @JsonProperty("court")
+    private void unpackNested(Integer court) {
+        this.court = new Court();
+        this.court.setId(court);
     }
 }

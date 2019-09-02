@@ -3,8 +3,10 @@ package com.deileo.basketFinderJava.controller;
 import com.deileo.basketFinderJava.entity.Court;
 import com.deileo.basketFinderJava.service.CourtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,26 +32,20 @@ public class CourtController {
         return courtService.getCourtsByType(Court.TYPE_PRIVATE);
     }
 
-    @GetMapping("/{id}")
-    public Court getCourt(@PathVariable Integer id) {
-        return courtService.find(id);
+    @GetMapping("/{court}")
+    public Court getCourt(Court court) {
+        return court;
     }
 
     @PostMapping()
-    public String addCourt(@RequestBody Court court) {
+    public ResponseEntity<String> addCourt(@Valid @RequestBody Court court) {
         courtService.save(court);
 
-        return "Success!";
+        return ResponseEntity.ok("Success");
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteCourt(@PathVariable Integer id) {
-        Court court = courtService.find(id);
-
-        if (court == null) {
-            return "Court not found!";
-        }
-
+    @GetMapping("/delete/{court}")
+    public String deleteCourt(Court court) {
         courtService.delete(court);
 
         return "Success!";

@@ -1,6 +1,12 @@
 package com.deileo.basketFinderJava.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.validator.constraints.Range;
+
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,21 +21,28 @@ public class Court {
     private Integer id;
 
     @Column(nullable = false)
+    @NotBlank
     private String name;
 
     @Column(nullable = false)
+    @NotBlank
     private String address;
 
     @Column(nullable = false)
+    @NotBlank
     private String location;
 
     @Column()
     private String description;
 
     @Column(scale = 6, nullable = false)
+    @NotNull
+    @Range(min = -90, max=90)
     private Double lat;
 
     @Column(scale = 6, nullable = false)
+    @NotNull
+    @Range(min = -180, max=180)
     private Double lng;
 
     @Column(nullable = false)
@@ -39,9 +52,11 @@ public class Court {
     private Boolean isNew = false;
 
     @Column(nullable = false, length = 7)
+    @NotBlank
     private String type;
-//
-    @OneToMany(mappedBy = "court")
+
+    @OneToMany(mappedBy = "court", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @JsonBackReference
     private List<Event> events;
 
     public Court() {

@@ -1,4 +1,4 @@
-package com.deileo.basketFinderJava.utils;
+package com.deileo.basketFinderImporter.utils;
 
 import com.deileo.basketFinderJava.entity.Court;
 import com.deileo.basketFinderJava.service.GeoCoderService;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 public class CourtReader {
-    private static final String TYPE_GYM_COURT = "Vidaus";
+    private static final String TYPE_PRIVATE_COURT = "Vidaus";
 
     private GeoCoderService geoCoderService;
 
@@ -39,16 +39,16 @@ public class CourtReader {
         return courts;
     }
 
-    public List<Court> readGymCourts(Reader reader) throws IOException, ApiException, InterruptedException {
+    public List<Court> readPrivateCourts(Reader reader) throws IOException, ApiException, InterruptedException {
         List<Court> courts = new ArrayList<>();
         String[] row;
         CSVReader courtReader = this.getReader(reader);
 
         while ((row = courtReader.readNext()) != null) {
-            if (row.length > 1 && row[1].equals(TYPE_GYM_COURT)) {
+            if (row.length > 1 && row[1].equals(TYPE_PRIVATE_COURT)) {
                 LatLng geocode = geoCoderService.getGeoLocationByAddress(row[4]);
                 if (geocode != null) {
-                    courts.add(this.createGymCourt(row, geocode));
+                    courts.add(this.createPrivateCourt(row, geocode));
                 }
             }
         }
@@ -75,7 +75,7 @@ public class CourtReader {
         return court;
     }
 
-    private Court createGymCourt(String[] row, LatLng geocode) {
+    private Court createPrivateCourt(String[] row, LatLng geocode) {
         Court court = new Court(Court.TYPE_PRIVATE);
         court.setLocation(row[0]);
         court.setName(row[3]);
