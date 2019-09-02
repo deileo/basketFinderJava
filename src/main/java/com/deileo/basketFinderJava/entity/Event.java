@@ -2,6 +2,9 @@ package com.deileo.basketFinderJava.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -9,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="events")
+@Where(clause="deleted_at IS NULL")
 public class Event {
 
     @Id
@@ -47,6 +51,15 @@ public class Event {
     @JoinColumn(nullable = false)
     @NotNull
     private Court court;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column()
+    private LocalDateTime updatedAt;
+
+    @Column()
+    private LocalDateTime deletedAt;
 
     public Integer getId() {
         return id;
@@ -108,9 +121,49 @@ public class Event {
         this.court = court;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
     @JsonProperty("court")
     private void unpackNested(Integer court) {
         this.court = new Court();
         this.court.setId(court);
+    }
+
+    @PreRemove
+    public void onPreRemove() {
+        deletedAt = LocalDateTime.now();
+    }
+
+    @PrePersist
+    public void onPrePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onPreUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }
