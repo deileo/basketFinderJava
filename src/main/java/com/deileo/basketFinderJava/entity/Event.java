@@ -2,9 +2,8 @@ package com.deileo.basketFinderJava.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -12,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="events")
+@SQLDelete(sql = "UPDATE events SET deleted_at = NOW() WHERE id = ?")
 @Where(clause="deleted_at IS NULL")
 public class Event {
 
@@ -149,11 +149,6 @@ public class Event {
     private void unpackNested(Integer court) {
         this.court = new Court();
         this.court.setId(court);
-    }
-
-    @PreRemove
-    public void onPreRemove() {
-        deletedAt = LocalDateTime.now();
     }
 
     @PrePersist

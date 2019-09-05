@@ -39,9 +39,9 @@ public class EventController {
     }
 
     @GetMapping("/delete/{event}")
-    public String deleteCourt(Event event) {
+    public ResponseEntity<String> deleteCourt(Event event) {
         eventService.delete(event);
 
-        return "Success!";
+        return ResponseEntity.ok("Success");
     }
 }

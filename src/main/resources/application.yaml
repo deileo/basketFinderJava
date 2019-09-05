@@ -1,0 +1,13 @@
+spring:
+    datasource:
+        url: jdbc:mysql://localhost:3310/basketFinder?useSSL=false
+        username: basketFinder
+        password: basketFinder
+
+    jpa:
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+                ddl-auto: validate
+
+google.api.key: AIzaSyCxcxPO50dh9UFCO70A43YI_waCAT0SFBA

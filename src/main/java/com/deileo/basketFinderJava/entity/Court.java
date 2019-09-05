@@ -1,6 +1,7 @@
 package com.deileo.basketFinderJava.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Range;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name="courts")
+@SQLDelete(sql = "UPDATE courts SET deleted_at = NOW() WHERE id = ?")
 @Where(clause="deleted_at IS NULL")
 public class Court {
     public static final String TYPE_PRIVATE = "private";
@@ -192,11 +194,6 @@ public class Court {
 
     public void setDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
-    }
-
-    @PreRemove
-    public void onPreRemove() {
-        deletedAt = LocalDateTime.now();
     }
 
     @PrePersist
