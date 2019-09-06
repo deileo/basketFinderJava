@@ -3,6 +3,7 @@ package com.deileo.basketFinderJava.controller;
 import com.deileo.basketFinderJava.entity.Court;
 import com.deileo.basketFinderJava.entity.Event;
 import com.deileo.basketFinderJava.service.EventService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +14,13 @@ import java.util.List;
 @RequestMapping("/api/events")
 public class EventController {
 
+    @Autowired
     private EventService eventService;
 
-    public EventController(EventService eventService) {
-        this.eventService = eventService;
+    @GetMapping()
+    @ResponseBody
+    public List<Event> getEvents() {
+        return eventService.findAll();
     }
 
     @GetMapping("/court/{court}")

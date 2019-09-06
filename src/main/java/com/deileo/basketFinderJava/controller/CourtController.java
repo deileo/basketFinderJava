@@ -13,12 +13,8 @@ import java.util.List;
 @RequestMapping("/api/courts")
 public class CourtController {
 
-    private CourtService courtService;
-
     @Autowired
-    public CourtController(CourtService courtService) {
-        this.courtService = courtService;
-    }
+    private CourtService courtService;
 
     @GetMapping("/public")
     @ResponseBody
