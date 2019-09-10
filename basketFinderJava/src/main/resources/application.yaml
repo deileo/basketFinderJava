@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3310/basketFinder?useSSL=false
+    url: jdbc:mysql://localhost:3309/basketFinder?useSSL=false
     username: basketFinder
     password: basketFinder
 
