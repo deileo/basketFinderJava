@@ -1,6 +1,7 @@
 package com.deileo.basketFinderImporter.utils;
 
 import com.deileo.basketFinderJava.entity.Court;
+import com.deileo.basketFinderJava.entity.CourtType;
 import com.deileo.basketFinderJava.service.GeoCoderService;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.LatLng;
@@ -64,7 +65,7 @@ public class CourtReader {
     }
 
     private Court createPublicCourt(String[] row, LatLng geocode) {
-        Court court = new Court(Court.TYPE_PUBLIC);
+        Court court = new Court(CourtType.PUBLIC);
         court.setLocation(row[1]);
         court.setAddress(row[2]);
         court.setName(row[2]);
@@ -76,7 +77,7 @@ public class CourtReader {
     }
 
     private Court createPrivateCourt(String[] row, LatLng geocode) {
-        Court court = new Court(Court.TYPE_PRIVATE);
+        Court court = new Court(CourtType.PRIVATE);
         court.setLocation(row[0]);
         court.setName(row[3]);
         court.setAddress(row[4]);

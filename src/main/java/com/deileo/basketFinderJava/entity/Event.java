@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="events")
-@SQLDelete(sql = "UPDATE events SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE courts SET deleted_at = NOW() WHERE id = ?")
 @Where(clause="deleted_at IS NULL")
-public class Event {
+public class Event extends DateAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,15 +51,6 @@ public class Event {
     @JoinColumn(nullable = false)
     @NotNull
     private Court court;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column()
-    private LocalDateTime updatedAt;
-
-    @Column()
-    private LocalDateTime deletedAt;
 
     public Integer getId() {
         return id;
@@ -121,44 +112,9 @@ public class Event {
         this.court = court;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
-    }
-
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
     @JsonProperty("court")
     private void unpackNested(Integer court) {
         this.court = new Court();
         this.court.setId(court);
-    }
-
-    @PrePersist
-    public void onPrePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void onPreUpdate() {
-        updatedAt = LocalDateTime.now();
     }
 }

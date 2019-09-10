@@ -4,3 +4,4 @@ target/
 .mvn/wrapper/maven-wrapper.properties
 !**/src/main/**
 !**/src/test/**
+basketFinderJava.iml
