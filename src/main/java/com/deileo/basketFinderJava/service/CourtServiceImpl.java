@@ -1,6 +1,7 @@
 package com.deileo.basketFinderJava.service;
 
 import com.deileo.basketFinderJava.entity.Court;
+import com.deileo.basketFinderJava.entity.CourtType;
 import com.deileo.basketFinderJava.repository.CourtRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class CourtServiceImpl implements CourtService {
     }
 
     @Override
-    public List<Court> getCourtsByType(String type) {
+    public List<Court> getCourtsByType(CourtType type) {
         return courtRepo.getCourtsByType(type);
     }
 }

@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Range;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +15,7 @@ import java.util.List;
 @Table(name="courts")
 @SQLDelete(sql = "UPDATE courts SET deleted_at = NOW() WHERE id = ?")
 @Where(clause="deleted_at IS NULL")
-public class Court {
-    public static final String TYPE_PRIVATE = "private";
-    public static final String TYPE_PUBLIC = "public";
+public class Court extends DateAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,18 +52,9 @@ public class Court {
     @Column(nullable = false)
     private Boolean isNew = false;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 7)
-    @NotBlank
-    private String type;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column()
-    private LocalDateTime updatedAt;
-
-    @Column()
-    private LocalDateTime deletedAt;
+    private CourtType type;
 
     @OneToMany(mappedBy = "court", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JsonBackReference
@@ -76,7 +64,7 @@ public class Court {
         this.events = new ArrayList<Event>();
     }
 
-    public Court(String type) {
+    public Court(CourtType type) {
         this.events = new ArrayList<Event>();
         this.type = type;
     }
@@ -153,7 +141,7 @@ public class Court {
         isNew = aNew;
     }
 
-    public String getType() {
+    public CourtType getType() {
         return type;
     }
 
@@ -170,40 +158,5 @@ public class Court {
 
     public void removeEvent(Event event) {
         this.events.remove(event);
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
-    }
-
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-    @PrePersist
-    public void onPrePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void onPreUpdate() {
-        updatedAt = LocalDateTime.now();
     }
 }
