@@ -1,6 +1,7 @@
 package com.deileo.basketFinderJava.controller;
 
 import com.deileo.basketFinderJava.entity.Court;
+import com.deileo.basketFinderJava.entity.CourtType;
 import com.deileo.basketFinderJava.entity.Event;
 import com.deileo.basketFinderJava.request.EventDto;
 import com.deileo.basketFinderJava.security.CurrentUser;
@@ -31,13 +32,13 @@ public class EventController {
     @GetMapping("/public")
     @ResponseBody
     public List<Event> getPublicEvents() {
-        return eventService.findAll();
+        return eventService.getEventsByCourtType(CourtType.PUBLIC);
     }
 
     @GetMapping("/private")
     @ResponseBody
     public List<Event> getPrivateEvents() {
-        return eventService.findAll();
+        return eventService.getEventsByCourtType(CourtType.PRIVATE);
     }
 
     @GetMapping("/court/{court}")

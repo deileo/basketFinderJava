@@ -1,10 +1,12 @@
 package com.deileo.basketFinderJava.service;
 
 import com.deileo.basketFinderJava.entity.Court;
+import com.deileo.basketFinderJava.entity.CourtType;
 import com.deileo.basketFinderJava.entity.Event;
 import com.deileo.basketFinderJava.repository.EventRepository;
 import com.deileo.basketFinderJava.request.EventDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,14 +18,11 @@ import java.util.Optional;
 @Service
 public class EventServiceImpl implements EventService {
 
+    @Autowired
     private EventRepository eventRepo;
 
+    @Autowired
     private ModelMapper modelMapper;
-
-    public EventServiceImpl(EventRepository eventRepo, ModelMapper modelMapper) {
-        this.eventRepo = eventRepo;
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public List<Event> findAll() {
@@ -50,6 +49,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getCourtEvents(Court court) {
         return eventRepo.getCourtEvents(court);
+    }
+
+    @Override
+    public List<Event> getEventsByCourtType(CourtType type) {
+        return eventRepo.getEventsByCourtType(type);
     }
 
     private Event convertToEntity(EventDto eventDto) throws ParseException {

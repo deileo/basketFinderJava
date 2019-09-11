@@ -17,15 +17,11 @@ import java.util.Optional;
 @Transactional
 public class CourtServiceImpl implements CourtService {
 
+    @Autowired
     private CourtRepository courtRepo;
 
-    private ModelMapper modelMapper;
-
     @Autowired
-    public CourtServiceImpl(CourtRepository courtRepo, ModelMapper modelMapper) {
-        this.courtRepo = courtRepo;
-        this.modelMapper = modelMapper;
-    }
+    private ModelMapper modelMapper;
 
     @Override
     public List<CourtDto> findAll() {

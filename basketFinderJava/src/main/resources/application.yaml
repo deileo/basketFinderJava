@@ -39,6 +39,8 @@ routes:
     - "/api/courts/*"
     - "/api/courts/private"
     - "/api/events/court/*"
+    - "/api/events/public"
+    - "/api/events/private"
     - "/favicon.ico"
     - "/**/*.png"
     - "/**/*.gif"
