@@ -1,5 +1,5 @@
 import axios from "axios";
-import {API_URL} from "../config";
+import {ACCESS_TOKEN, API_URL} from "../config";
 
 const config = {
   headers: {
@@ -9,7 +9,9 @@ const config = {
 };
 
 export function getUnconfirmedParticipants() {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/participants/unconfirmed';
 
@@ -23,7 +25,9 @@ export function getEventParticipants(event, type) {
 }
 
 export function acceptParticipant(participant) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/participants/accept/' + participant.id;
 
@@ -31,7 +35,9 @@ export function acceptParticipant(participant) {
 }
 
 export function cancelParticipant(participant) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/participants/cancel/' + participant.id;
 

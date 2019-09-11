@@ -8,9 +8,12 @@ const config = {
   }
 };
 
-export function checkUser(userToken) {
-  return axios.post(API_URL + '/connect/google/check',
-    userToken,
+export function getUser(token) {
+  if(token) {
+    config.headers['Authorization'] = 'Bearer ' + token;
+  }
+
+  return axios.get(API_URL + '/user/me',
     config
   );
 }

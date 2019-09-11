@@ -10,7 +10,7 @@ const userState = {
 export default function(state = userState, action) {
   switch (action.type) {
     case GET_USER: {
-      return { ...state, auth: action.payload, isAuthenticated: !!action.payload };
+      return { ...state, user: action.payload, isAuthenticated: !!action.payload };
     }
     case GET_USERS: {
       return { ...state, users: action.payload, reload: false };

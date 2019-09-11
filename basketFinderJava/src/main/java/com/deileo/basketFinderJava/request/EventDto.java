@@ -1,48 +1,48 @@
-package com.deileo.basketFinderJava.entity;
+package com.deileo.basketFinderJava.request;
 
+import com.deileo.basketFinderJava.entity.Court;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-@Entity
-@Table(name="events")
-@SQLDelete(sql = "UPDATE courts SET deleted_at = NOW() WHERE id = ?")
-@Where(clause="deleted_at IS NULL")
-public class Event extends DateAudit {
+public class EventDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @NotBlank
     private String name;
 
-    @Column(nullable = false)
+    @NotNull
+    @Positive
     private Integer neededPlayers = 0;
 
-    @Column()
     private String description;
 
-    @Column(scale = 2)
+    @PositiveOrZero
     private Double price = 0.0;
 
-    @Column(nullable = false)
-    private LocalDateTime startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @NotNull
+    private String startTime;
 
-    @Column()
-    private LocalDateTime endTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private String endTime;
 
-    @ManyToOne
     @JoinColumn(nullable = false)
+    @NotNull
     private Court court;
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -77,27 +77,37 @@ public class Event extends DateAudit {
         this.price = price;
     }
 
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
-
     public Court getCourt() {
         return court;
     }
 
     public void setCourt(Court court) {
         this.court = court;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public LocalDateTime convertStartTimeToDateTimeObject() throws ParseException {
+        return LocalDateTime.parse(this.startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    @JsonProperty("court")
+    private void unpackNested(Integer court) {
+        this.court = new Court();
+        this.court.setId(court);
     }
 }

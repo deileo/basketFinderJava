@@ -23,9 +23,9 @@ import {
   editEvent, getAllEvents
 } from '../services/eventService';
 
-export const createEventAction = (createEventData, type) => {
+export const createEventAction = (createEventData) => {
   return function(dispatch) {
-    return createEvent(createEventData, type)
+    return createEvent(createEventData)
       .then(response => {
         if (response.status === 201) {
           dispatch({type: CREATE_EVENT_MODAL_CLOSED, payload: {isOpen: false}});

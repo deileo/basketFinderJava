@@ -10,16 +10,20 @@ const config = {
 };
 
 
-export function createEvent(eventData, type = TYPE_COURT) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+export function createEvent(eventData) {
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
-  let url = API_URL + '/events/' + type +'/new';
+  let url = API_URL + '/events/new';
 
   return axios.post(url, eventData, config);
 }
 
 export function editEvent(eventData, eventId, type = TYPE_COURT) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/events/' + type + '/' + eventId + '/edit';
 
@@ -27,7 +31,9 @@ export function editEvent(eventData, eventId, type = TYPE_COURT) {
 }
 
 export function joinEvent(eventId, type) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   return axios.post(
     API_URL + '/events/' + type + '/' + eventId + '/join', {},
@@ -36,7 +42,9 @@ export function joinEvent(eventId, type) {
 }
 
 export function leaveEvent(eventId, type) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/events/' + type + '/' + eventId + '/leave';
 
@@ -48,13 +56,13 @@ export function getEvents(type, courtId = null) {
     type = TYPE_COURT;
   }
 
-  let url = courtId ?
-    API_URL + '/events/' + type + '/' + courtId :
-    API_URL + '/events';
-
   if(localStorage.getItem(ACCESS_TOKEN)) {
     config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
   }
+
+  let url = courtId ?
+    API_URL + '/events/' + type + '/' + courtId :
+    API_URL + '/events/' + type;
 
   return axios.get(url, config);
 }
@@ -64,7 +72,9 @@ export function getAllEvents() {
 }
 
 export function getUserCreatedEvents() {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/events/user';
 
@@ -72,7 +82,9 @@ export function getUserCreatedEvents() {
 }
 
 export function getUserJoinedEvents() {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/events/user/joined/events';
 
@@ -80,7 +92,9 @@ export function getUserJoinedEvents() {
 }
 
 export function deleteEvent(eventId, type) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/events/' + type + '/' + eventId + '/delete';
 
