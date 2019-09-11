@@ -8,6 +8,9 @@ import {MuiPickersUtilsProvider} from "material-ui-pickers";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import EventLoader from "./components/EventLoader";
 import OAuth2RedirectHandler from "./services/Oauth2RedirectHandler";
+import {connect} from "react-redux";
+import * as actions from "./actions";
+import {ACCESS_TOKEN} from "./config";
 
 const theme = createMuiTheme({
   palette: {
@@ -46,7 +49,13 @@ const Application = React.lazy(() => import('./Application'));
 const Admin = React.lazy(() => import('./Admin'));
 
 class App extends Component {
- render() {
+  componentDidMount() {
+    if (localStorage.getItem('token')) {
+      this.props.getUserAction(localStorage.getItem(ACCESS_TOKEN));
+    }
+  }
+
+  render() {
    return (
      <Suspense fallback={<div style={{height: '100vh'}}><EventLoader/></div>}>
        <BrowserRouter>
@@ -72,4 +81,10 @@ class App extends Component {
  }
 }
 
-export default withStyles(styles)(App);
+const mapStateToProps = state => {
+  return {
+    userReducer: state.userReducer,
+  };
+};
+
+export default connect(mapStateToProps, actions)(withStyles(styles)(App));

@@ -2,6 +2,7 @@ package com.deileo.basketFinderJava.controller;
 
 import com.deileo.basketFinderJava.entity.Court;
 import com.deileo.basketFinderJava.entity.CourtType;
+import com.deileo.basketFinderJava.response.CourtDto;
 import com.deileo.basketFinderJava.service.CourtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,13 @@ public class CourtController {
 
     @GetMapping("/public")
     @ResponseBody
-    public List<Court> getPublicCourts() {
+    public List<CourtDto> getPublicCourts() {
         return courtService.getCourtsByType(CourtType.PUBLIC);
     }
 
     @GetMapping("/private")
     @ResponseBody
-    public List<Court> getPrivateCourts() {
+    public List<CourtDto> getPrivateCourts() {
         return courtService.getCourtsByType(CourtType.PRIVATE);
     }
 

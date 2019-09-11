@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {GoogleLogin, GoogleLogout} from "react-google-login";
-import {GOOGLE_CLIENT_ID, GOOGLE_AUTH_URL} from "../../config";
+import { GoogleLogout} from "react-google-login";
+import { GOOGLE_AUTH_URL } from "../../config";
 import Button from "@material-ui/core/Button/Button";
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import Popper from "@material-ui/core/Popper/Popper";
@@ -44,15 +44,6 @@ class AuthItem extends Component {
     this.setState({ anchorEl: null });
   };
 
-  responseGoogle = (response) => {
-    console.error(response);
-  };
-
-  onGoogleSuccess = (response) => {
-    this.props.checkUserAction(response.tokenObj);
-    localStorage.setItem('token', response.accessToken);
-  };
-
   onLogoutSuccess = () => {
     this.props.logoutUser();
   };
@@ -75,30 +66,21 @@ class AuthItem extends Component {
 
   render() {
     const {userReducer, classes} = this.props;
-
     if (!localStorage.getItem('token') || !userReducer || !userReducer.isAuthenticated) {
       return (
         <div>
           <a className="btn btn-block social-btn google" href={GOOGLE_AUTH_URL}>
             <img src="#" alt="Google" /> Log in with Google</a>
-          {/*<GoogleLogin*/}
-          {/*  style={{borderRadius: 100}}*/}
-          {/*  clientId={GOOGLE_CLIENT_ID}*/}
-          {/*  buttonText="Prisijungti"*/}
-          {/*  isSignedIn={true}*/}
-          {/*  onSuccess={this.onGoogleSuccess}*/}
-          {/*  onFailure={this.responseGoogle}*/}
-          {/*/>*/}
         </div>
       );
     }
 
-    const user = userReducer.auth;
+    const user = userReducer.user;
     return (
       <div>
         <Button color="inherit" onClick={this.handleMenu}>
-          <Avatar alt="Profile Picture" src={user.googleImage} style={{marginRight: 10}}/>
-          {user.firstName + ' ' + user.lastName}
+          <Avatar alt="Profile Picture" src={user.imageUrl} style={{marginRight: 10}}/>
+          {user.name}
         </Button>
         <Popper open={this.state.open} anchorEl={this.state.anchorEl} transition disablePortal>
           {({TransitionProps}) => (
@@ -106,11 +88,9 @@ class AuthItem extends Component {
               <Paper>
                 <ClickAwayListener onClickAway={this.handleClose}>
                   <MenuList>
-                    {user.roles.includes('ROLE_ADMIN') ?
-                      <MenuItem onClick={() => {window.location.href = '/admin'}}>
-                        Administracinis valdymas
-                      </MenuItem> : ''
-                    }
+                    <MenuItem onClick={() => {window.location.href = '/admin'}}>
+                      Administracinis valdymas
+                    </MenuItem> : ''
                     <MenuItem onClick={this.onAddCourt}>
                       Pridėti lauko aikštelę
                     </MenuItem>

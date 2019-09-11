@@ -1,5 +1,5 @@
 import axios from "axios";
-import {API_URL} from "../config";
+import {ACCESS_TOKEN, API_URL} from "../config";
 
 const config = {
   headers: {
@@ -9,7 +9,9 @@ const config = {
 };
 
 export function sendPermissionRequest(requestData) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
   config.headers['Content-Type'] = 'multipart/form-data';
 
   const formData = new FormData();
@@ -23,7 +25,9 @@ export function sendPermissionRequest(requestData) {
 }
 
 export function sendPermissionRequestApproval(permissionId, approveData) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/permission/approve/' + permissionId;
 
@@ -31,7 +35,9 @@ export function sendPermissionRequestApproval(permissionId, approveData) {
 }
 
 export function deletePermission(permissionId) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/permission/delete/' + permissionId;
 
@@ -39,7 +45,9 @@ export function deletePermission(permissionId) {
 }
 
 export function getGymCourtPermission(gymCourtId) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/permission/gym-court/' + gymCourtId;
 
@@ -47,7 +55,9 @@ export function getGymCourtPermission(gymCourtId) {
 }
 
 export function getPermissions() {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/permission/all';
 

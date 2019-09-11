@@ -89,7 +89,7 @@ class CreateGymEventForm extends Component {
   }
 
   handleSubmit = () => {
-    this.props.createEventAction(this.state, this.props.courtsReducer.type);
+    this.props.createEventAction(this.state);
   };
 
   render() {

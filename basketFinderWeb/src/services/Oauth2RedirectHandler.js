@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { ACCESS_TOKEN } from '../config';
 import { Redirect } from 'react-router-dom'
+import {connect} from "react-redux";
+import * as actions from "../actions";
+import {withStyles} from "@material-ui/core";
+import {courtStyles} from "../components/styles";
 
 class OAuth2RedirectHandler extends Component {
   getUrlParameter(name) {
@@ -16,6 +20,7 @@ class OAuth2RedirectHandler extends Component {
     const error = this.getUrlParameter('error');
 
     if(token) {
+      this.props.getUserAction(token);
       localStorage.setItem(ACCESS_TOKEN, token);
       return <Redirect to={{
         pathname: "/",
@@ -33,4 +38,10 @@ class OAuth2RedirectHandler extends Component {
   }
 }
 
-export default OAuth2RedirectHandler;
+const mapStateToProps = state => {
+  return {
+    userReducer: state.userReducer,
+  };
+};
+
+export default connect(mapStateToProps, actions)(withStyles(courtStyles)(OAuth2RedirectHandler));
