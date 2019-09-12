@@ -1,4 +1,4 @@
-package com.deileo.basketFinderJava.request;
+package com.deileo.basketFinderJava.payload;
 
 import com.deileo.basketFinderJava.entity.Court;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -9,6 +9,8 @@ import javax.validation.constraints.*;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventDto {
 
@@ -35,7 +37,9 @@ public class EventDto {
 
     @JoinColumn(nullable = false)
     @NotNull
-    private Court court;
+    private CourtDto court;
+
+    private List<Court> participants = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -77,11 +81,11 @@ public class EventDto {
         this.price = price;
     }
 
-    public Court getCourt() {
+    public CourtDto getCourt() {
         return court;
     }
 
-    public void setCourt(Court court) {
+    public void setCourt(CourtDto court) {
         this.court = court;
     }
 
@@ -101,13 +105,21 @@ public class EventDto {
         this.endTime = endTime;
     }
 
+    public List<Court> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<Court> participants) {
+        this.participants = participants;
+    }
+
     public LocalDateTime convertStartTimeToDateTimeObject() throws ParseException {
         return LocalDateTime.parse(this.startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     @JsonProperty("court")
     private void unpackNested(Integer court) {
-        this.court = new Court();
+        this.court = new CourtDto();
         this.court.setId(court);
     }
 }

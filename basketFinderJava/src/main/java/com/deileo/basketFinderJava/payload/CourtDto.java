@@ -1,4 +1,4 @@
-package com.deileo.basketFinderJava.response;
+package com.deileo.basketFinderJava.payload;
 
 import com.deileo.basketFinderJava.entity.CourtType;
 

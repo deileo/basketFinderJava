@@ -4,13 +4,14 @@ import com.deileo.basketFinderJava.entity.Court;
 import com.deileo.basketFinderJava.entity.CourtType;
 import com.deileo.basketFinderJava.entity.Event;
 import com.deileo.basketFinderJava.repository.EventRepository;
-import com.deileo.basketFinderJava.request.EventDto;
+import com.deileo.basketFinderJava.payload.EventDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +26,13 @@ public class EventServiceImpl implements EventService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<Event> findAll() {
-        return eventRepo.findAll();
+    public List<EventDto> findAll() {
+        List<EventDto> events = new ArrayList<>();
+        for (Event event : eventRepo.findAll()) {
+            events.add(this.convertToDto(event));
+        }
+
+        return events;
     }
 
     @Override
@@ -47,13 +53,23 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getCourtEvents(Court court) {
-        return eventRepo.getCourtEvents(court);
+    public List<EventDto> getCourtEvents(Court court) {
+        List<EventDto> events = new ArrayList<>();
+        for (Event event : eventRepo.getCourtEvents(court)) {
+            events.add(this.convertToDto(event));
+        }
+
+        return events;
     }
 
     @Override
-    public List<Event> getEventsByCourtType(CourtType type) {
-        return eventRepo.getEventsByCourtType(type);
+    public List<EventDto> getEventsByCourtType(CourtType type) {
+        List<EventDto> events = new ArrayList<>();
+        for (Event event : eventRepo.getEventsByCourtType(type)) {
+            events.add(this.convertToDto(event));
+        }
+
+        return events;
     }
 
     private Event convertToEntity(EventDto eventDto) throws ParseException {
@@ -62,5 +78,9 @@ public class EventServiceImpl implements EventService {
         event.setStartTime(eventDto.convertStartTimeToDateTimeObject());
 
         return event;
+    }
+
+    private EventDto convertToDto(Event event) {
+        return modelMapper.map(event, EventDto.class);
     }
 }

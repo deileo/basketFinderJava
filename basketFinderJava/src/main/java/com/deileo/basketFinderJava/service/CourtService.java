@@ -2,7 +2,7 @@ package com.deileo.basketFinderJava.service;
 
 import com.deileo.basketFinderJava.entity.Court;
 import com.deileo.basketFinderJava.entity.CourtType;
-import com.deileo.basketFinderJava.response.CourtDto;
+import com.deileo.basketFinderJava.payload.CourtDto;
 
 import java.util.List;
 

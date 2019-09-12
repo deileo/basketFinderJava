@@ -16,6 +16,7 @@ import {
   createEvent,
   joinEvent,
   getEvents,
+  getCourtEvents,
   leaveEvent,
   getUserCreatedEvents,
   getUserJoinedEvents,
@@ -93,11 +94,28 @@ export const leaveEventAction = (eventId, type) => {
   };
 };
 
-export const getEventsAction = (type, courtId = null) => {
+export const getEventsAction = (type) => {
   return function(dispatch) {
     dispatch({ type: LOADING_EVENTS_STARTED });
 
-    return getEvents(type, courtId)
+    return getEvents(type)
+      .then(response => {
+        return dispatch({ type: GET_EVENTS, payload: response.data });
+      })
+      .catch(error => {
+        return showConsoleError(error);
+      })
+      .finally(() => {
+        dispatch({ type: LOADING_EVENTS_ENDED });
+      })
+  };
+};
+
+export const getCourtEventsAction = (courtId) => {
+  return function(dispatch) {
+    dispatch({ type: LOADING_EVENTS_STARTED });
+
+    return getCourtEvents(courtId)
       .then(response => {
         return dispatch({ type: GET_EVENTS, payload: response.data });
       })

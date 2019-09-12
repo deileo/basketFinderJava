@@ -2,9 +2,10 @@ package com.deileo.basketFinderJava.controller;
 
 import com.deileo.basketFinderJava.entity.Court;
 import com.deileo.basketFinderJava.entity.CourtType;
-import com.deileo.basketFinderJava.response.CourtDto;
+import com.deileo.basketFinderJava.payload.CourtDto;
 import com.deileo.basketFinderJava.service.CourtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class CourtController {
     public ResponseEntity<String> addCourt(@Valid @RequestBody Court court) {
         courtService.save(court);
 
-        return ResponseEntity.ok("Success");
+        return new ResponseEntity<>("Success!", HttpStatus.CREATED);
     }
 
     @GetMapping("/delete/{court}")
