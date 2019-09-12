@@ -25,8 +25,10 @@ class EventList extends Component {
       let court = this.props.courtsReducer ? this.props.courtsReducer.court : null;
       if (court) {
         this.props.fetchCourtById(this.props.courtsReducer.type, court.id);
+        this.props.getCourtEventsAction(court.id);
+      } else {
+        this.props.getEventsAction(this.props.courtsReducer.type);
       }
-      this.props.getEventsAction(this.props.courtsReducer.type, court ? court.id : null);
       this.props.resetEventCreationAction();
     }
   }
@@ -37,8 +39,8 @@ class EventList extends Component {
         {events.map(event => {
           return (
             <Event
-              key={event.event.id}
-              event={event.event}
+              key={event.id}
+              event={event}
               commentsCount={event.commentsCount}
               type={this.props.courtsReducer.type}
             />

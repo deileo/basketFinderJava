@@ -1,22 +1,22 @@
 version: '3.7'
 
 services:
-  app-server:
-    build:
-      context: basketFinderJava
-      dockerfile: Dockerfile
-    ports:
-      - 8080:8080
-    restart: always
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/basketFinder?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
-      SPRING_DATASOURCE_USERNAME: basketFinder
-      SPRING_DATASOURCE_PASSWORD: basketFinder   
-    depends_on:
-      - db
-    networks:
-      - backend
-      - frontend
+ # app-server:
+ #   build:
+ #     context: basketFinderJava
+ #     dockerfile: Dockerfile
+ #   ports:
+ #     - 8080:8080
+ #   restart: always
+ #   environment:
+ #     SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/basketFinder?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+ #     SPRING_DATASOURCE_USERNAME: basketFinder
+ #     SPRING_DATASOURCE_PASSWORD: basketFinder   
+ #   depends_on:
+ #     - db
+ #   networks:
+ #     - backend
+ #     - frontend
   
   app-client:
     image: bitnami/node
@@ -26,8 +26,8 @@ services:
     volumes:
       - ./basketFinderWeb:/app
     restart: always
-    depends_on:
-      - app-server
+    #   depends_on:
+    #  - app-server
     networks:
       - frontend
   

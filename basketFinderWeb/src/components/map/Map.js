@@ -45,7 +45,7 @@ class Map extends Component {
     this.setState({activeMarker: courtId});
     if (courtId) {
       this.props.fetchCourtById(type, courtId);
-      this.props.getEventsAction(type, courtId);
+      this.props.getCourtEventsAction(courtId);
       if (type === TYPE_GYM_COURT) {
         this.props.getGymCourtPermissionAction(courtId)
       }

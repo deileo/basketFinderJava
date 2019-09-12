@@ -3,11 +3,12 @@ package com.deileo.basketFinderJava.controller;
 import com.deileo.basketFinderJava.entity.Court;
 import com.deileo.basketFinderJava.entity.CourtType;
 import com.deileo.basketFinderJava.entity.Event;
-import com.deileo.basketFinderJava.request.EventDto;
+import com.deileo.basketFinderJava.payload.EventDto;
 import com.deileo.basketFinderJava.security.CurrentUser;
 import com.deileo.basketFinderJava.security.UserPrincipal;
 import com.deileo.basketFinderJava.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,25 +26,25 @@ public class EventController {
 
     @GetMapping()
     @ResponseBody
-    public List<Event> getEvents() {
+    public List<EventDto> getEvents() {
         return eventService.findAll();
     }
 
     @GetMapping("/public")
     @ResponseBody
-    public List<Event> getPublicEvents() {
+    public List<EventDto> getPublicEvents() {
         return eventService.getEventsByCourtType(CourtType.PUBLIC);
     }
 
     @GetMapping("/private")
     @ResponseBody
-    public List<Event> getPrivateEvents() {
+    public List<EventDto> getPrivateEvents() {
         return eventService.getEventsByCourtType(CourtType.PRIVATE);
     }
 
     @GetMapping("/court/{court}")
     @ResponseBody
-    public List<Event> getCourtEvents(Court court) {
+    public List<EventDto> getCourtEvents(Court court) {
         return eventService.getCourtEvents(court);
     }
 
@@ -69,7 +70,7 @@ public class EventController {
     public ResponseEntity<String> addEvent(@Valid @RequestBody EventDto event) throws ParseException {
         eventService.save(event);
 
-        return ResponseEntity.ok("Success");
+        return new ResponseEntity<>("Success!", HttpStatus.CREATED);
     }
 
     @GetMapping("/delete/{event}")

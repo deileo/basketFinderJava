@@ -51,7 +51,7 @@ export function leaveEvent(eventId, type) {
   return axios.post(url, {}, config);
 }
 
-export function getEvents(type, courtId = null) {
+export function getEvents(type) {
   if (!type) {
     type = TYPE_COURT;
   }
@@ -60,11 +60,15 @@ export function getEvents(type, courtId = null) {
     config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
   }
 
-  let url = courtId ?
-    API_URL + '/events/' + type + '/' + courtId :
-    API_URL + '/events/' + type;
+  return axios.get(API_URL + '/events/' + type, config);
+}
 
-  return axios.get(url, config);
+export function getCourtEvents(courtId) {
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
+
+  return axios.get(API_URL + '/events/court/' + courtId, config);
 }
 
 export function getAllEvents() {
