@@ -13,7 +13,6 @@ import List from "@material-ui/core/List";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import LeaveIcon from '@material-ui/icons/RemoveCircle';
-import {TYPE_COURT, TYPE_GYM_COURT} from "../../actions/types";
 import EventLoader from "../EventLoader";
 import icon  from "../../event-icon.png";
 
@@ -26,7 +25,7 @@ class MyJoinedEvents extends Component {
   }
 
   handleLeave = (event) => {
-    this.props.leaveEventAction(event.id, event.court ? TYPE_COURT : TYPE_GYM_COURT);
+    this.props.leaveEventAction(event.id);
     this.props.getUserJoinedEventsAction();
   };
 

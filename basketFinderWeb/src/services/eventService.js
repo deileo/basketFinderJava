@@ -30,25 +30,20 @@ export function editEvent(eventData, eventId, type = TYPE_COURT) {
   return axios.post(url, eventData, config);
 }
 
-export function joinEvent(eventId, type) {
+export function joinEvent(eventId) {
   if(localStorage.getItem(ACCESS_TOKEN)) {
     config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
   }
 
-  return axios.post(
-    API_URL + '/events/' + type + '/' + eventId + '/join', {},
-    config
-  );
+  return axios.post(API_URL + '/events/join/' + eventId, {}, config);
 }
 
-export function leaveEvent(eventId, type) {
+export function leaveEvent(eventId) {
   if(localStorage.getItem(ACCESS_TOKEN)) {
     config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
   }
 
-  let url = API_URL + '/events/' + type + '/' + eventId + '/leave';
-
-  return axios.post(url, {}, config);
+  return axios.post(API_URL + '/events/leave/' + eventId, {}, config);
 }
 
 export function getEvents(type) {
