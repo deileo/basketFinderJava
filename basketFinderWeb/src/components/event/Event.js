@@ -39,13 +39,13 @@ class Event extends Component {
 
 
   handleJoin = () => {
-    const {event, type} = this.props;
-    this.props.joinEventAction(event.id, type);
+    const {event} = this.props;
+    this.props.joinEventAction(event.id);
   };
 
   handleLeave = () => {
-    const {event, type} = this.props;
-    this.props.leaveEventAction(event.id, type);
+    const {event} = this.props;
+    this.props.leaveEventAction(event.id);
   };
 
   renderEventJoinActions = (userReducer, event, type) => {
@@ -55,8 +55,8 @@ class Event extends Component {
 
     let joinedUserList = event.participants.filter(function (participant) {
       return type === TYPE_GYM_COURT ?
-        participant.user && participant.user.id === userReducer.auth.id :
-        participant.id === userReducer.auth.id;
+        participant && participant.id === userReducer.user.id :
+        participant.id === userReducer.user.id;
     });
 
 

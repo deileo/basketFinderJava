@@ -1,13 +1,11 @@
 package com.deileo.basketFinderJava.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="events")
@@ -40,6 +38,9 @@ public class Event extends DateAudit {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Court court;
+
+    @ManyToMany(mappedBy = "joinedEvents", cascade = CascadeType.ALL)
+    private List<User> participants;
 
     public Integer getId() {
         return id;
@@ -99,5 +100,25 @@ public class Event extends DateAudit {
 
     public void setCourt(Court court) {
         this.court = court;
+    }
+
+    public List<User> getParticipants() {
+        return participants;
+    }
+
+    public void addParticipant(User participant) {
+        if (!this.participants.contains(participant)) {
+            this.participants.add(participant);
+            participant.addJoinedEvent(this);
+        }
+    }
+
+    public void removeParticipant(User participant) {
+        this.participants.remove(participant);
+        participant.removeJoinedEvent(this);
+    }
+
+    public void setParticipants(List<User> participants) {
+        this.participants = participants;
     }
 }

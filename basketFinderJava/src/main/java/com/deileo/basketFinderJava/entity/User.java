@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -39,6 +40,14 @@ public class User {
 
     @Column
     private String providerId;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "event_participants",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "event_id")
+    )
+    private List<Event> joinedEvents;
 
     public Integer getId() {
         return id;
@@ -102,5 +111,23 @@ public class User {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    public List<Event> getJoinedEvents() {
+        return joinedEvents;
+    }
+
+    public void addJoinedEvent(Event event) {
+        if (!this.joinedEvents.contains(event)) {
+            this.joinedEvents.add(event);
+        }
+    }
+
+    public void removeJoinedEvent(Event event) {
+        this.joinedEvents.remove(event);
+    }
+
+    public void setJoinedEvents(List<Event> joinedEvents) {
+        this.joinedEvents = joinedEvents;
     }
 }

@@ -1,6 +1,5 @@
 package com.deileo.basketFinderJava.payload;
 
-import com.deileo.basketFinderJava.entity.Court;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -39,7 +38,8 @@ public class EventDto {
     @NotNull
     private CourtDto court;
 
-    private List<Court> participants = new ArrayList<>();
+    @JoinColumn
+    private List<UserDto> participants = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -105,16 +105,22 @@ public class EventDto {
         this.endTime = endTime;
     }
 
-    public List<Court> getParticipants() {
+    public List<UserDto> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<Court> participants) {
+    public void addParticipant(UserDto user) {
+        if (!participants.contains(user)) {
+            participants.add(user);
+        }
+    }
+
+    public void setParticipants(List<UserDto> participants) {
         this.participants = participants;
     }
 
     public LocalDateTime convertStartTimeToDateTimeObject() throws ParseException {
-        return LocalDateTime.parse(this.startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     @JsonProperty("court")

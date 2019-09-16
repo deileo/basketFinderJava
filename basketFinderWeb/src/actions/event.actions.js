@@ -63,9 +63,9 @@ export const editEventAction = (eventData, eventId, type) => {
   };
 };
 
-export const joinEventAction = (eventId, type) => {
+export const joinEventAction = (eventId) => {
   return function(dispatch) {
-    return joinEvent(eventId, type)
+    return joinEvent(eventId)
       .then(response => {
         if (response.status === 201) {
           dispatch({type: FLASH_MESSAGE, payload: {isOpen: true, message: 'Prisijungta į rungtynes!', variant: 'success'}});
@@ -80,9 +80,9 @@ export const joinEventAction = (eventId, type) => {
   };
 };
 
-export const leaveEventAction = (eventId, type) => {
+export const leaveEventAction = (eventId) => {
   return function(dispatch) {
-    return leaveEvent(eventId, type)
+    return leaveEvent(eventId)
       .then(response => {
         dispatch({type: FLASH_MESSAGE, payload: {isOpen: true, message: 'Nutrauktas dalyvavimas!', variant: 'success'}});
 
