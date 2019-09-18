@@ -2,6 +2,7 @@ package com.deileo.basketFinderJava.entity;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,6 +39,11 @@ public class Event extends DateAudit {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Court court;
+
+    @CreatedBy
+    @ManyToOne
+    @JoinColumn(name = "created_by", nullable = false)
+    private User createdBy;
 
     @ManyToMany(mappedBy = "joinedEvents", cascade = CascadeType.ALL)
     private List<User> participants;
@@ -100,6 +106,14 @@ public class Event extends DateAudit {
 
     public void setCourt(Court court) {
         this.court = court;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     public List<User> getParticipants() {

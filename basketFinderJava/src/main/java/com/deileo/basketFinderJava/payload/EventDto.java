@@ -36,6 +36,9 @@ public class EventDto {
     @NotNull
     private CourtDto court;
 
+    @JoinColumn(nullable = false)
+    private BaseUserDto createdBy;
+
     private Integer joinedPlayers = 0;
 
     public Integer getId() {
@@ -84,6 +87,14 @@ public class EventDto {
 
     public void setCourt(CourtDto court) {
         this.court = court;
+    }
+
+    public BaseUserDto getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(BaseUserDto createdBy) {
+        this.createdBy = createdBy;
     }
 
     public String getStartTime() {

@@ -18,8 +18,8 @@ export function getUnconfirmedParticipants() {
   return axios.get(url, config);
 }
 
-export function getEventParticipants(event, type) {
-  let url = API_URL + '/participants/event/' + type + '/' + event.id;
+export function getEventParticipants(event) {
+  let url = API_URL + '/participants/' + event.id;
 
   return axios.get(url, config);
 }

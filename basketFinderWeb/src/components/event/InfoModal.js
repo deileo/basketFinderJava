@@ -22,8 +22,8 @@ class InfoModal extends Component {
   };
 
   componentDidMount() {
-    const {event, type} = this.props;
-    this.props.getEventParticipantsAction(event, type);
+    const {event} = this.props;
+    this.props.getEventParticipantsAction(event);
   }
 
   componentWillUnmount() {
@@ -47,10 +47,10 @@ class InfoModal extends Component {
           <DialogContent style={{paddingBottom: 0}}>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src={event.createdBy.googleImage}/>
+                <Avatar alt="Remy Sharp" src={event.createdBy.imageUrl}/>
               </ListItemAvatar>
               <ListItemText
-                primary={event.createdBy.firstName + ' ' + event.createdBy.lastName}
+                primary={event.createdBy.name}
                 secondary={'El. paštas: ' + event.createdBy.email}
               />
             </ListItem>
@@ -69,10 +69,10 @@ class InfoModal extends Component {
                 return (
                   <ListItem alignItems="flex-start" key={participant.id}>
                     <ListItemAvatar>
-                      <Avatar alt="Remy Sharp" src={participant.googleImage}/>
+                      <Avatar alt="Remy Sharp" src={participant.imageUrl}/>
                     </ListItemAvatar>
                     <ListItemText
-                      primary={participant.firstName + ' ' + participant.lastName}
+                      primary={participant.name}
                       secondary={'El. paštas: ' + participant.email}
                     />
                   </ListItem>

@@ -28,9 +28,9 @@ export const getUnconfirmedParticipantsAction = () => {
   };
 };
 
-export const getEventParticipantsAction = (event, type) => {
+export const getEventParticipantsAction = (event) => {
   return function(dispatch) {
-    return getEventParticipants(event, type)
+    return getEventParticipants(event)
       .then(response => {
         return dispatch({ type: GET_EVENT_PARTICIPANTS, payload: response.data });
       })

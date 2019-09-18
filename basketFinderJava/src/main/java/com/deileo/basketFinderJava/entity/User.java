@@ -41,6 +41,9 @@ public class User {
     @Column
     private String providerId;
 
+    @OneToMany(mappedBy = "createdBy")
+    private List<Event> createdEvents;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
         name = "event_participants",
@@ -111,6 +114,21 @@ public class User {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    public List<Event> getCreatedEvents() {
+        return createdEvents;
+    }
+
+    public void addCreatedEvent(Event event) {
+        if (!createdEvents.contains(event)) {
+            event.setCreatedBy(this);
+            createdEvents.add(event);
+        }
+    }
+
+    public void removeEvent(Event event) {
+        createdEvents.remove(event);
     }
 
     public List<Event> getJoinedEvents() {
