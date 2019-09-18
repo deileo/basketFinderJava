@@ -34,11 +34,10 @@ export const createEventAction = (createEventData) => {
 
           return dispatch({type: CREATE_EVENT, payload: response.data});
         }
-        if (response.status === 200) {
-          return dispatch({ type: CREATE_EVENT_ERROR, payload: response.data });
-        }
       })
       .catch(error => {
+        dispatch({ type: CREATE_EVENT_ERROR, payload: error.response.data });
+
         return showConsoleError(error);
       });
   };

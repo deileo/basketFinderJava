@@ -24,7 +24,7 @@ class CreateEventForm extends Component {
     date: moment(),
     startTimeDate: moment(),
     court: this.props.court.id,
-    startTime: '',
+    startTime: moment().format('YYYY-MM-DD hh:mm:00'),
   };
 
   componentDidMount() {
@@ -54,13 +54,11 @@ class CreateEventForm extends Component {
   };
 
   handleDateChange = (date) => {
-    console.log(this.state);
     this.setState({date: date});
     this.setState({startTime: date.format('YYYY-MM-DD') + ' ' + this.state.startTimeDate.format('hh:mm:00')});
   };
 
   handleStartTimeDateChange = startTimeDate => {
-    console.log(this.state);
     this.setState({startTimeDate: startTimeDate});
     this.setState({startTime: this.state.date.format('YYYY-MM-DD') + ' ' + startTimeDate.format('hh:mm:00')});
   };
@@ -123,15 +121,16 @@ class CreateEventForm extends Component {
 
             <Grid item sm={6}>
               <FormControl margin="normal" required fullWidth>
-                <DatePicker autoOk
-                            label="Data"
-                            disablePast
-                            value={date}
-                            required={true}
-                            error={this.hasError('date')}
-                            format="YYYY-MM-DD"
-                            onChange={this.handleDateChange}
-                            variant="outlined"
+                <DatePicker
+                  autoOk
+                  label="Data"
+                  disablePast
+                  value={date}
+                  required={true}
+                  error={this.hasError('date')}
+                  format="YYYY-MM-DD"
+                  onChange={this.handleDateChange}
+                  variant="outlined"
                 />
                 {this.getErrorMessage('date')}
               </FormControl>
@@ -139,14 +138,15 @@ class CreateEventForm extends Component {
 
             <Grid item sm={6}>
               <FormControl margin="normal" required fullWidth>
-                <TimePicker autoOk
-                            ampm={false}
-                            label="Pradžios laikas"
-                            value={startTimeDate}
-                            required={true}
-                            onChange={this.handleStartTimeDateChange}
-                            variant="outlined"
-                            error={this.hasError('startTime')}
+                <TimePicker
+                  autoOk
+                  ampm={false}
+                  label="Pradžios laikas"
+                  value={startTimeDate}
+                  required={true}
+                  onChange={this.handleStartTimeDateChange}
+                  variant="outlined"
+                  error={this.hasError('startTime')}
                 />
                 {this.getErrorMessage('startTime')}
               </FormControl>
@@ -157,13 +157,14 @@ class CreateEventForm extends Component {
                 <InputLabel error={this.hasError('neededPlayers')}>
                   Reikiamas žaidėjų skaičius: {neededPlayers}
                 </InputLabel>
-                <Slider value={neededPlayers}
-                        min={1}
-                        max={10}
-                        step={1}
-                        onChange={this.handleNeededPlayersChange}
-                        style={{marginBottom: 30}}
-                        required={true}
+                <Slider
+                  value={neededPlayers}
+                  min={1}
+                  max={10}
+                  step={1}
+                  onChange={this.handleNeededPlayersChange}
+                  style={{marginBottom: 30}}
+                  required={true}
                 />
                 {this.getErrorMessage('neededPlayers')}
               </FormControl>
@@ -187,12 +188,13 @@ class CreateEventForm extends Component {
             </Grid>
           </Grid>
 
-          <Button type="button"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                  onClick={this.handleSubmit}
+          <Button
+            type="button"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={this.handleSubmit}
           >
             {this.props.event ? 'Redaguoti' : 'Sukurti'}
           </Button>

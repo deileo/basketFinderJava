@@ -7,9 +7,11 @@ import com.deileo.basketFinderJava.payload.EventDto;
 import com.deileo.basketFinderJava.security.CurrentUser;
 import com.deileo.basketFinderJava.security.UserPrincipal;
 import com.deileo.basketFinderJava.service.EventService;
+import com.deileo.basketFinderJava.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,6 +25,9 @@ public class EventController {
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private ValidationUtils validation;
 
     @GetMapping()
     @ResponseBody
@@ -83,7 +88,11 @@ public class EventController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<String> addEvent(@Valid @RequestBody EventDto event) throws ParseException {
+    public ResponseEntity<Object> addEvent(@Valid @RequestBody EventDto event, BindingResult bindingResult) throws ParseException {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(validation.getErrorsMap(bindingResult), HttpStatus.BAD_REQUEST);
+        }
+
         eventService.save(event);
 
         return new ResponseEntity<>("Success!", HttpStatus.CREATED);
