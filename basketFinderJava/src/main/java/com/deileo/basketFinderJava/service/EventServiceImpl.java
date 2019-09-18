@@ -96,11 +96,19 @@ public class EventServiceImpl implements EventService {
 
         event.setStartTime(eventDto.convertStartTimeToDateTimeObject());
 
+        if (eventDto.getEndTime() != null) {
+            event.setEndTime(eventDto.convertEndTimeToDateTimeObject());
+        }
+
         return event;
     }
 
     private EventDto convertToDto(Event event) {
-        return modelMapper.map(event, EventDto.class);
+        EventDto eventDto = modelMapper.map(event, EventDto.class);
+
+        eventDto.setJoinedPlayers(event.getParticipants().size());
+
+        return eventDto;
     }
 
     private User getCurrentUser() {

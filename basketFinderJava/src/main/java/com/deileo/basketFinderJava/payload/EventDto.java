@@ -8,8 +8,6 @@ import javax.validation.constraints.*;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EventDto {
 
@@ -38,8 +36,7 @@ public class EventDto {
     @NotNull
     private CourtDto court;
 
-    @JoinColumn
-    private List<UserDto> participants = new ArrayList<>();
+    private Integer joinedPlayers = 0;
 
     public Integer getId() {
         return id;
@@ -105,22 +102,20 @@ public class EventDto {
         this.endTime = endTime;
     }
 
-    public List<UserDto> getParticipants() {
-        return participants;
+    public Integer getJoinedPlayers() {
+        return joinedPlayers;
     }
 
-    public void addParticipant(UserDto user) {
-        if (!participants.contains(user)) {
-            participants.add(user);
-        }
-    }
-
-    public void setParticipants(List<UserDto> participants) {
-        this.participants = participants;
+    public void setJoinedPlayers(Integer joinedPlayers) {
+        this.joinedPlayers = joinedPlayers;
     }
 
     public LocalDateTime convertStartTimeToDateTimeObject() throws ParseException {
         return LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public LocalDateTime convertEndTimeToDateTimeObject() throws ParseException {
+        return LocalDateTime.parse(endTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     @JsonProperty("court")

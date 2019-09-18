@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from 'moment';
 import {TYPE_COURT, TYPE_GYM_COURT} from "../actions/types";
 import {ACCESS_TOKEN, API_URL} from "../config";
 
@@ -101,10 +102,10 @@ export function deleteEvent(eventId, type) {
 }
 
 export const getEventTime = (event, type) => {
-  let eventTime = event.date + ' ' + event.startTime;
+  let eventTime = moment(event.startTime).format('YYYY-MM-DD hh:mm');
 
   if (type === TYPE_GYM_COURT && event.endTime) {
-    eventTime += ' - ' + event.endTime;
+    eventTime += ' - ' + moment(event.endTime).format('hh:mm');
   }
 
   return eventTime;

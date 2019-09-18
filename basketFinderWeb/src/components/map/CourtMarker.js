@@ -14,7 +14,6 @@ import {TYPE_COURT} from "../../actions/types";
 import CreateGymEventForm from "../form/CreateGymEventForm";
 import {courtStyles, modalStyles} from "../styles";
 import CreatePermissionRequestForm from "../form/CreatePermissionRequestForm";
-import moment from "moment";
 import Comments from "../comment/Comments";
 
 class CourtMarker extends Component {
@@ -57,33 +56,6 @@ class CourtMarker extends Component {
   handleClose = () => {
     this.props.closeCreateEventModalAction();
     this.props.removeEventErrorsAction();
-  };
-
-  renderGymCourtActions = () => {
-    const {userReducer, permissionReducer} = this.props;
-
-    if (!userReducer.isAuthenticated) {
-      return null;
-    }
-
-    if (permissionReducer.permission) {
-      let isPermissionValid = permissionReducer.permission.validUntil;
-      if (isPermissionValid !== null) {
-        isPermissionValid = isPermissionValid >= moment().format('YYYY-MM-DD');
-      }
-
-      return (
-        <Button size="small" variant="contained" disabled={!isPermissionValid} color="primary" onClick={this.handleOpen}>
-          {isPermissionValid ? 'Skelbti varžybas' : 'Laukiama patvirtinimo'}
-        </Button>
-      )
-    }
-
-    return (
-      <Button size="small" variant="contained" color="secondary" onClick={this.handleRequestOpen}>
-        Siųsti prašymą
-      </Button>
-    )
   };
 
   renderInfoWindow = (court, classes, activeMarker, modalReducer, courtReducer, userReducer) => {
@@ -145,21 +117,12 @@ class CourtMarker extends Component {
             Informacija: {court.description}
           </Typography>
         </CardContent>
-        <CardActions>
-          {userReducer.isAuthenticated ?
-            <Button size="small" variant="contained" color="primary" onClick={this.handleOpen}>
-              Skelbti varžybas
-            </Button> : ''
-          }
-          <Button size="small" variant="outlined" color="primary" onClick={() => this.handleCommentOpen()}>
-            Komentarai {this.props.commentsCount > 0 ? ' (' + this.props.commentsCount + ')' : null}
-          </Button>
-        </CardActions>
+        {this.renderCourtActions(userReducer)}
       </div>
     )
   }
 
-  renderGymCourtWindow(court, classes) {
+  renderGymCourtWindow(court, userReducer, classes) {
     return (
       <div>
         <CardContent className={classes.content}>
@@ -174,13 +137,23 @@ class CourtMarker extends Component {
             Būklė: {court.condition}
           </Typography>
         </CardContent>
-        <CardActions>
-            {this.renderGymCourtActions()}
-            <Button size="small" variant="outlined" color="primary" onClick={() => this.handleCommentOpen()}>
-              Komentarai {this.props.commentsCount > 0 ? ' (' + this.props.commentsCount + ')' : null}
-            </Button>
-        </CardActions>
+        {this.renderCourtActions(userReducer)}
       </div>
+    )
+  }
+
+  renderCourtActions(userReducer) {
+    return (
+      <CardActions>
+        {userReducer.isAuthenticated ?
+          <Button size="small" variant="contained" color="primary" onClick={this.handleOpen}>
+            Skelbti varžybas
+          </Button> : ''
+        }
+        <Button size="small" variant="outlined" color="primary" onClick={() => this.handleCommentOpen()}>
+          Komentarai {this.props.commentsCount > 0 ? ' (' + this.props.commentsCount + ')' : null}
+        </Button>
+      </CardActions>
     )
   }
 
