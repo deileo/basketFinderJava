@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {withStyles} from "@material-ui/core";
+import moment from "moment";
 import {eventStyles} from '../styles';
 import {connect} from 'react-redux';
 import * as actions from './../../actions';
@@ -15,27 +16,27 @@ import EventLoader from "../EventLoader";
 class CommentList extends Component {
 
   componentDidMount() {
-    const {event, court, type} = this.props;
+    const {event, court} = this.props;
 
     if (court) {
-      this.props.getCourtCommentsAction(court, type);
+      this.props.getCourtCommentsAction(court);
     }
 
     if (event) {
-      this.props.getEventCommentsAction(event, type);
+      this.props.getEventCommentsAction(event);
     }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const {commentReducer, court, event, type} = this.props;
+    const {commentReducer, court, event} = this.props;
 
     if (commentReducer && commentReducer.reload) {
       if (court) {
-        this.props.getCourtCommentsAction(court, type);
+        this.props.getCourtCommentsAction(court);
       }
 
       if (event) {
-        this.props.getEventCommentsAction(event, type);
+        this.props.getEventCommentsAction(event);
       }
 
       this.props.resetCourtCommentsAction();
@@ -66,13 +67,13 @@ class CommentList extends Component {
           return (
             <ListItem alignItems="flex-start" key={comment.id}>
               <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src={user.googleImage}/>
+                <Avatar alt="Remy Sharp" src={user.imageUrl}/>
               </ListItemAvatar>
               <div style={{marginLeft: 10}}>
                 <ListItemText
                   style={{padding: 0}}
                   primary={comment.comment}
-                  secondary={user.firstName + ' ' + user.lastName + ' ' + comment.createdAt}
+                  secondary={user.name + ' ' + moment(comment.createdAt).format('YYYY-MM-DD HH:mm')}
                 />
               </div>
             </ListItem>

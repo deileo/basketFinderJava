@@ -117,7 +117,7 @@ class CourtMarker extends Component {
             Informacija: {court.description}
           </Typography>
         </CardContent>
-        {this.renderCourtActions(userReducer)}
+        {this.renderCourtActions(userReducer, court)}
       </div>
     )
   }
@@ -137,12 +137,12 @@ class CourtMarker extends Component {
             Būklė: {court.condition}
           </Typography>
         </CardContent>
-        {this.renderCourtActions(userReducer)}
+        {this.renderCourtActions(userReducer, court)}
       </div>
     )
   }
 
-  renderCourtActions(userReducer) {
+  renderCourtActions(userReducer, court) {
     return (
       <CardActions>
         {userReducer.isAuthenticated ?
@@ -151,7 +151,7 @@ class CourtMarker extends Component {
           </Button> : ''
         }
         <Button size="small" variant="outlined" color="primary" onClick={() => this.handleCommentOpen()}>
-          Komentarai {this.props.commentsCount > 0 ? ' (' + this.props.commentsCount + ')' : null}
+          Komentarai {court.commentsCount > 0 ? ' (' + court.commentsCount + ')' : null}
         </Button>
       </CardActions>
     )

@@ -41,6 +41,8 @@ public class EventDto {
 
     private Integer joinedPlayers = 0;
 
+    private Integer commentsCount = 0;
+
     public Integer getId() {
         return id;
     }
@@ -119,6 +121,14 @@ public class EventDto {
 
     public void setJoinedPlayers(Integer joinedPlayers) {
         this.joinedPlayers = joinedPlayers;
+    }
+
+    public Integer getCommentsCount() {
+        return commentsCount;
+    }
+
+    public void setCommentsCount(Integer commentsCount) {
+        this.commentsCount = commentsCount;
     }
 
     public LocalDateTime convertStartTimeToDateTimeObject() throws ParseException {

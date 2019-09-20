@@ -45,11 +45,18 @@ public class Event extends DateAudit {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
+
     @ManyToMany(mappedBy = "joinedEvents", cascade = CascadeType.ALL)
     private List<User> participants;
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -116,23 +123,30 @@ public class Event extends DateAudit {
         this.createdBy = createdBy;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void addComment(Comment comment) {
+        if (!comments.contains(comment)) {
+            comments.add(comment);
+            comment.setEvent(this);
+        }
+    }
+
     public List<User> getParticipants() {
         return participants;
     }
 
     public void addParticipant(User participant) {
-        if (!this.participants.contains(participant)) {
-            this.participants.add(participant);
+        if (!participants.contains(participant)) {
+            participants.add(participant);
             participant.addJoinedEvent(this);
         }
     }
 
     public void removeParticipant(User participant) {
-        this.participants.remove(participant);
+        participants.remove(participant);
         participant.removeJoinedEvent(this);
-    }
-
-    public void setParticipants(List<User> participants) {
-        this.participants = participants;
     }
 }

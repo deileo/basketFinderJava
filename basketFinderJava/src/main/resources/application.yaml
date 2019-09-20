@@ -41,6 +41,8 @@ routes:
     - "/api/events/court/*"
     - "/api/events/public"
     - "/api/events/private"
+    - "/api/comments/event/*"
+    - "/api/comments/court/*"
     - "/favicon.ico"
     - "/**/*.png"
     - "/**/*.gif"

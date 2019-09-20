@@ -63,6 +63,10 @@ public class CourtServiceImpl implements CourtService {
     }
 
     private CourtDto convertToDto(Court court) {
-        return modelMapper.map(court, CourtDto.class);
+        CourtDto courtDto = modelMapper.map(court, CourtDto.class);
+
+        courtDto.setCommentsCount(court.getComments().size());
+
+        return courtDto;
     }
 }

@@ -60,12 +60,16 @@ public class Court extends DateAudit {
     @JsonBackReference
     private List<Event> events;
 
+    @OneToMany(mappedBy = "court", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<Comment> comments;
+
     public Court() {
-        this.events = new ArrayList<Event>();
+        events = new ArrayList<Event>();
+        comments = new ArrayList<Comment>();
     }
 
     public Court(CourtType type) {
-        this.events = new ArrayList<Event>();
+        events = new ArrayList<Event>();
         this.type = type;
     }
 
@@ -150,13 +154,24 @@ public class Court extends DateAudit {
     }
 
     public void addEvent(Event event) {
-        if (!this.events.contains(event)) {
+        if (!events.contains(event)) {
+            events.add(event);
             event.setCourt(this);
-            this.events.add(event);
         }
     }
 
     public void removeEvent(Event event) {
-        this.events.remove(event);
+        events.remove(event);
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void addComment(Comment comment) {
+        if (!comments.contains(comment)) {
+            comments.add(comment);
+            comment.setCourt(this);
+        }
     }
 }

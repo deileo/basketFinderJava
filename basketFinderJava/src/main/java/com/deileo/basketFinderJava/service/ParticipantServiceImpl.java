@@ -6,11 +6,13 @@ import com.deileo.basketFinderJava.payload.ParticipantDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class ParticipantServiceImpl implements ParticipantService {
 
     @Autowired
@@ -21,7 +23,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         List<ParticipantDto> participants = new ArrayList<>();
 
         for (User user : event.getParticipants()) {
-            participants.add(this.convertToDto(user));
+            participants.add(convertToDto(user));
         }
 
         return participants;
