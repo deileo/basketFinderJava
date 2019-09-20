@@ -15,6 +15,8 @@ class Comments extends Component {
 
   state = {
     comment: '',
+    event: this.props.event ? this.props.event.id : null,
+    court: this.props.court ? this.props.court.id : null
   };
 
   handleCommentChange = (event) => {
@@ -22,16 +24,7 @@ class Comments extends Component {
   };
 
   handleSubmit = () => {
-    const {event, court, type} = this.props;
-
-    if (court) {
-      this.props.createCourtCommentAction(this.state, court, type);
-    }
-
-    if (event) {
-      this.props.createEventCommentAction(this.state, event, type);
-    }
-
+    this.props.createCommentAction(this.state);
     this.setState({comment: ''});
   };
 

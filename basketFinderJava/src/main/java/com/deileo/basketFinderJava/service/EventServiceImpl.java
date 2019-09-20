@@ -36,7 +36,7 @@ public class EventServiceImpl implements EventService {
     public List<EventDto> findAll() {
         List<EventDto> events = new ArrayList<>();
         for (Event event : eventRepo.findAll()) {
-            events.add(this.convertToDto(event));
+            events.add(convertToDto(event));
         }
 
         return events;
@@ -51,7 +51,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void save(EventDto event) throws ParseException {
-        eventRepo.save(this.convertToEntity(event));
+        eventRepo.save(convertToEntity(event));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class EventServiceImpl implements EventService {
     public List<EventDto> getCourtEvents(Court court) {
         List<EventDto> events = new ArrayList<>();
         for (Event event : eventRepo.getCourtEvents(court)) {
-            events.add(this.convertToDto(event));
+            events.add(convertToDto(event));
         }
 
         return events;
@@ -73,20 +73,20 @@ public class EventServiceImpl implements EventService {
     public List<EventDto> getEventsByCourtType(CourtType type) {
         List<EventDto> events = new ArrayList<>();
         for (Event event : eventRepo.getEventsByCourtType(type)) {
-            events.add(this.convertToDto(event));
+            events.add(convertToDto(event));
         }
 
         return events;
     }
 
     public void joinEvent(Event event) {
-        event.addParticipant(this.getCurrentUser());
+        event.addParticipant(getCurrentUser());
 
         eventRepo.save(event);
     }
 
     public void leaveEvent(Event event) {
-        event.removeParticipant(this.getCurrentUser());
+        event.removeParticipant(getCurrentUser());
 
         eventRepo.save(event);
     }
@@ -107,6 +107,7 @@ public class EventServiceImpl implements EventService {
         EventDto eventDto = modelMapper.map(event, EventDto.class);
 
         eventDto.setJoinedPlayers(event.getParticipants().size());
+        eventDto.setCommentsCount(event.getComments().size());
 
         return eventDto;
     }

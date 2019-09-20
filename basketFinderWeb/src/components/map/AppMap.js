@@ -13,7 +13,6 @@ const AppMap = withScriptjs(withGoogleMap((props) =>
       return <CourtMarker
         key={court.id}
         court={court}
-        commentsCount={0}
         handleMarkerClick={props.handleMarkerClick}
         activeMarker={props.activeMarker}
       />

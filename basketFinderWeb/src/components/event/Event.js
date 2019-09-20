@@ -104,7 +104,7 @@ class Event extends Component {
             </Button>
 
             <Button size="small" variant="outlined" color="primary" onClick={() => this.handleCommentOpen()}>
-              Komentarai {this.props.commentsCount > 0 ? ' (' + this.props.commentsCount + ')' : null}
+              Komentarai {event.commentsCount > 0 ? ' (' + event.commentsCount + ')' : null}
             </Button>
 
             <Modal

@@ -43,7 +43,6 @@ class EventList extends Component {
             <Event
               key={event.id}
               event={event}
-              commentsCount={event.commentsCount}
               type={this.props.courtsReducer.type}
             />
           )

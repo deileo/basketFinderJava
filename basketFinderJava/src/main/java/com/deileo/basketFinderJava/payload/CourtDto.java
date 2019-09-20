@@ -20,6 +20,8 @@ public class CourtDto {
 
     private CourtType type;
 
+    private Integer commentsCount = 0;
+
     public Integer getId() {
         return id;
     }
@@ -82,5 +84,13 @@ public class CourtDto {
 
     public void setType(CourtType type) {
         this.type = type;
+    }
+
+    public Integer getCommentsCount() {
+        return commentsCount;
+    }
+
+    public void setCommentsCount(Integer commentsCount) {
+        this.commentsCount = commentsCount;
     }
 }
