@@ -18,18 +18,12 @@ export function getUnconfirmedParticipants() {
   return axios.get(url, config);
 }
 
-export function getEventParticipants(event) {
-  let url = API_URL + '/participants/' + event.id;
-
-  return axios.get(url, config);
-}
-
 export function acceptParticipant(participant) {
   if(localStorage.getItem(ACCESS_TOKEN)) {
     config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
   }
 
-  let url = API_URL + '/participants/accept/' + participant.id;
+  let url = API_URL + '/participants/accept/' + participant.eventId + '/' + participant.id;
 
   return axios.post(url, {}, config);
 }
@@ -39,7 +33,7 @@ export function cancelParticipant(participant) {
     config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
   }
 
-  let url = API_URL + '/participants/cancel/' + participant.id;
+  let url = API_URL + '/participants/cancel/' + participant.eventId + '/' + participant.id;
 
   return axios.post(url, {}, config);
 }

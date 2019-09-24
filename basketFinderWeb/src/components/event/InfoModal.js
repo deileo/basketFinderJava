@@ -5,8 +5,6 @@ import IconButton from "@material-ui/core/IconButton/IconButton";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
-import {connect} from "react-redux";
-import * as actions from "../../actions";
 import {withStyles} from "@material-ui/core";
 import {eventStyles} from "../styles";
 import {isArrayNotEmpty} from "../../services/eventService";
@@ -21,17 +19,8 @@ class InfoModal extends Component {
     this.props.onClose();
   };
 
-  componentDidMount() {
-    const {event} = this.props;
-    this.props.getEventParticipantsAction(event);
-  }
-
-  componentWillUnmount() {
-    this.props.resetEventParticipantsAction();
-  }
-
   render() {
-    const {classes, participantReducer, event} = this.props;
+    const {classes, event} = this.props;
 
     return (
       <div>
@@ -65,7 +54,7 @@ class InfoModal extends Component {
           </DialogTitle>
           <DialogContent>
             <List className={classes.root}>
-              {isArrayNotEmpty(participantReducer.eventParticipants) ? participantReducer.eventParticipants.map(participant => {
+              {isArrayNotEmpty(event.participants) ? event.participants.map(participant => {
                 return (
                   <ListItem alignItems="flex-start" key={participant.id}>
                     <ListItemAvatar>
@@ -86,10 +75,4 @@ class InfoModal extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    participantReducer: state.participantReducer,
-  };
-};
-
-export default connect(mapStateToProps, actions)(withStyles(eventStyles)(InfoModal));
+export default withStyles(eventStyles)(InfoModal);

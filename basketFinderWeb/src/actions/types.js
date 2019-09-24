@@ -55,7 +55,6 @@ export const ENABLE_USER = 'enable_user';
 
 // participants
 export const GET_PARTICIPANTS_UNCONFIRMED = 'unconfirmed_participants';
-export const GET_EVENT_PARTICIPANTS = 'get_event_participants';
 export const ACCEPT_PARTICIPANT = 'accept_participant';
 export const CANCEL_PARTICIPANT = 'cancle_participant';
 

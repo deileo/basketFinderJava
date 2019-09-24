@@ -59,23 +59,20 @@ class MyParticipantRequests extends Component {
     return (
       <List className={classes.root} style={{height: '30vh', overflowY: 'scroll'}}>
         {isArrayNotEmpty(participantReducer.unconfirmedParticipants) ? participantReducer.unconfirmedParticipants.map(participant => {
-          let user = participant.user;
-          let event = participant.event;
-
           return (
             <ListItem alignItems="flex-start" key={participant.id}>
               <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src={user.googleImage}/>
+                <Avatar alt="Remy Sharp" src={participant.imageUrl}/>
               </ListItemAvatar>
               <div style={{marginLeft: 10}}>
                 <ListItemText
                   style={{padding: 0}}
-                  primary={'Prašymas prisijungti į ' + event.name}
-                  secondary={'Vardas: ' + user.firstName + ' ' + user.lastName}
+                  primary={'Prašymas prisijungti į ' + participant.eventName}
+                  secondary={'Vardas: ' + participant.name}
                 />
                 <ListItemText
                   style={{padding: 0}}
-                  secondary={'El. paštas: ' + user.email}
+                  secondary={'El. paštas: ' + participant.email}
                 />
               </div>
               <ListItemSecondaryAction>

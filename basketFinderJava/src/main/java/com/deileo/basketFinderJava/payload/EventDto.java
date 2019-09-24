@@ -8,6 +8,7 @@ import javax.validation.constraints.*;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class EventDto {
 
@@ -38,6 +39,10 @@ public class EventDto {
 
     @JoinColumn(nullable = false)
     private BaseUserDto createdBy;
+
+    private List<ParticipantDto> participants;
+
+    private List<ParticipantDto> unconfirmedParticipants;
 
     private Integer joinedPlayers = 0;
 
@@ -129,6 +134,22 @@ public class EventDto {
 
     public void setCommentsCount(Integer commentsCount) {
         this.commentsCount = commentsCount;
+    }
+
+    public List<ParticipantDto> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<ParticipantDto> participants) {
+        this.participants = participants;
+    }
+
+    public List<ParticipantDto> getUnconfirmedParticipants() {
+        return unconfirmedParticipants;
+    }
+
+    public void setUnconfirmedParticipants(List<ParticipantDto> unconfirmedParticipants) {
+        this.unconfirmedParticipants = unconfirmedParticipants;
     }
 
     public LocalDateTime convertStartTimeToDateTimeObject() throws ParseException {

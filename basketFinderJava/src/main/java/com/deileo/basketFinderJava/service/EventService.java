@@ -21,8 +21,4 @@ public interface EventService {
     public List<EventDto> getCourtEvents(Court court);
 
     public List<EventDto> getEventsByCourtType(CourtType type);
-
-    public void joinEvent(Event event);
-
-    public void leaveEvent(Event event);
 }

@@ -36,7 +36,7 @@ export function joinEvent(eventId) {
     config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
   }
 
-  return axios.post(API_URL + '/events/join/' + eventId, {}, config);
+  return axios.post(API_URL + '/participants/join/' + eventId, {}, config);
 }
 
 export function leaveEvent(eventId) {
@@ -44,7 +44,7 @@ export function leaveEvent(eventId) {
     config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
   }
 
-  return axios.post(API_URL + '/events/leave/' + eventId, {}, config);
+  return axios.post(API_URL + '/participants/leave/' + eventId, {}, config);
 }
 
 export function getEvents(type) {

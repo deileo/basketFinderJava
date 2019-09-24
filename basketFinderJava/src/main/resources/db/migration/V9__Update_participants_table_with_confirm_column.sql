@@ -1,0 +1,1 @@
+ALTER TABLE event_participants ADD is_confirmed TINYINT(1) DEFAULT FALSE NOT NULL;

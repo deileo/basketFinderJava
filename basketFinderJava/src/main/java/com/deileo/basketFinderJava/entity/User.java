@@ -47,13 +47,8 @@ public class User {
     @OneToMany(mappedBy = "createdBy")
     private List<Comment> eventComments;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "event_participants",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
-    private List<Event> joinedEvents;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Participant> joinedEvents;
 
     public Integer getId() {
         return id;
@@ -144,17 +139,18 @@ public class User {
         }
     }
 
-    public List<Event> getJoinedEvents() {
+    public List<Participant> getJoinedEvents() {
         return joinedEvents;
     }
 
-    public void addJoinedEvent(Event event) {
-        if (!joinedEvents.contains(event)) {
-            joinedEvents.add(event);
+    public void addJoinedEvent(Participant participant) {
+        if (!joinedEvents.contains(participant)) {
+            joinedEvents.add(participant);
+            participant.setUser(this);
         }
     }
 
-    public void removeJoinedEvent(Event event) {
-        joinedEvents.remove(event);
+    public void removeJoinedEvent(Participant participant) {
+        joinedEvents.remove(participant);
     }
 }
