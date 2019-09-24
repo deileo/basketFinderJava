@@ -65,22 +65,6 @@ public class EventController {
         return new ArrayList<Event>();
     }
 
-    @PostMapping("/join/{event}")
-    @ResponseBody
-    public ResponseEntity<String> joinEvent(Event event) {
-        eventService.joinEvent(event);
-
-        return new ResponseEntity<>("Success!", HttpStatus.CREATED);
-    }
-
-    @PostMapping("/leave/{event}")
-    @ResponseBody
-    public ResponseEntity<String> leaveEvent(Event event) {
-        eventService.leaveEvent(event);
-
-        return new ResponseEntity<>("Success!", HttpStatus.OK);
-    }
-
     @GetMapping("/{event}")
     @ResponseBody
     public Event getEvent(Event event) {

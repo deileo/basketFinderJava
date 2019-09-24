@@ -48,8 +48,8 @@ public class Event extends DateAudit {
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
-    @ManyToMany(mappedBy = "joinedEvents", cascade = CascadeType.ALL)
-    private List<User> participants;
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Participant> participants;
 
     public Integer getId() {
         return id;
@@ -134,19 +134,18 @@ public class Event extends DateAudit {
         }
     }
 
-    public List<User> getParticipants() {
+    public List<Participant> getParticipants() {
         return participants;
     }
 
-    public void addParticipant(User participant) {
+    public void addParticipant(Participant participant) {
         if (!participants.contains(participant)) {
             participants.add(participant);
-            participant.addJoinedEvent(this);
+            participant.setEvent(this);
         }
     }
 
-    public void removeParticipant(User participant) {
+    public void removeParticipant(Participant participant) {
         participants.remove(participant);
-        participant.removeJoinedEvent(this);
     }
 }

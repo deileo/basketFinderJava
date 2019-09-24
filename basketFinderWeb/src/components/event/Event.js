@@ -37,7 +37,6 @@ class Event extends Component {
     this.setState({commentModalOpen: false});
   };
 
-
   handleJoin = () => {
     const {event} = this.props;
     this.props.joinEventAction(event.id);
@@ -52,14 +51,23 @@ class Event extends Component {
     if (!userReducer.isAuthenticated) {
       return null;
     }
+    let joined = event.participants.filter(function (participant) {
+      return participant.id === userReducer.user.id;
+    });
 
-    let joined = userReducer.user.joinedEvents.filter(function (joinedEvent) {
-      return joinedEvent.id === event.id;
+    let unconfirmed = event.unconfirmedParticipants.filter(function (participant) {
+      return participant.id === userReducer.user.id;
     });
 
     if (joined.length) {
       return (
         <Button size="small" variant="contained" color="secondary" onClick={this.handleLeave}>Išeiti</Button>
+      )
+    }
+
+    if (unconfirmed.length) {
+      return (
+        <Button size="small" variant="contained" color="secondary" disabled={true}>Prašymas išsiųstas</Button>
       )
     }
 

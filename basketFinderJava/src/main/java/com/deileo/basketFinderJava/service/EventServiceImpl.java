@@ -1,16 +1,11 @@
 package com.deileo.basketFinderJava.service;
 
-import com.deileo.basketFinderJava.entity.Court;
-import com.deileo.basketFinderJava.entity.CourtType;
-import com.deileo.basketFinderJava.entity.Event;
-import com.deileo.basketFinderJava.entity.User;
+import com.deileo.basketFinderJava.entity.*;
+import com.deileo.basketFinderJava.payload.ParticipantDto;
 import com.deileo.basketFinderJava.repository.EventRepository;
 import com.deileo.basketFinderJava.payload.EventDto;
-import com.deileo.basketFinderJava.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +19,13 @@ import java.util.Optional;
 public class EventServiceImpl implements EventService {
 
     @Autowired
-    private EventRepository eventRepo;
+    private ParticipantService participantService;
 
     @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
-    private UserRepository userRepository;
+    private EventRepository eventRepo;
 
     @Override
     public List<EventDto> findAll() {
@@ -44,9 +39,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event find(Integer id) {
-        Optional<Event> event = eventRepo.findById(id);
-
-        return event.orElse(null);
+        return eventRepo.findById(id).orElse(null);
     }
 
     @Override
@@ -79,18 +72,6 @@ public class EventServiceImpl implements EventService {
         return events;
     }
 
-    public void joinEvent(Event event) {
-        event.addParticipant(getCurrentUser());
-
-        eventRepo.save(event);
-    }
-
-    public void leaveEvent(Event event) {
-        event.removeParticipant(getCurrentUser());
-
-        eventRepo.save(event);
-    }
-
     private Event convertToEntity(EventDto eventDto) throws ParseException {
         Event event = modelMapper.map(eventDto, Event.class);
 
@@ -106,15 +87,40 @@ public class EventServiceImpl implements EventService {
     private EventDto convertToDto(Event event) {
         EventDto eventDto = modelMapper.map(event, EventDto.class);
 
-        eventDto.setJoinedPlayers(event.getParticipants().size());
+        eventDto.setJoinedPlayers(getConfirmedParticipantsCount(event));
         eventDto.setCommentsCount(event.getComments().size());
+        eventDto.setParticipants(getConfirmedParticipantsList(event));
+        eventDto.setUnconfirmedParticipants(getUnconfirmedParticipantsList(event));
 
         return eventDto;
     }
 
-    private User getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    private Integer getConfirmedParticipantsCount(Event event) {
+        return (int) event.getParticipants()
+                        .stream()
+                        .filter(participant -> participant.getConfirmed().equals(true))
+                        .count();
+    }
 
-        return userRepository.findByEmail(auth.getName()).orElse(null);
+    private List<ParticipantDto> getConfirmedParticipantsList(Event event) {
+        List<ParticipantDto> participantDtos = new ArrayList<>();
+        event.getParticipants().forEach(participant -> {
+            if (participant.getConfirmed()) {
+                participantDtos.add(modelMapper.map(participant.getUser(), ParticipantDto.class));
+            }
+        });
+
+        return participantDtos;
+    }
+
+    private List<ParticipantDto> getUnconfirmedParticipantsList(Event event) {
+        List<ParticipantDto> participantDtos = new ArrayList<>();
+        event.getParticipants().forEach(participant -> {
+            if (!participant.getConfirmed()) {
+                participantDtos.add(modelMapper.map(participant.getUser(), ParticipantDto.class));
+            }
+        });
+
+        return participantDtos;
     }
 }
