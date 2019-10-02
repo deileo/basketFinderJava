@@ -4,6 +4,7 @@ import com.deileo.basketFinderJava.entity.Court;
 import com.deileo.basketFinderJava.entity.CourtType;
 import com.deileo.basketFinderJava.payload.CourtDto;
 import com.deileo.basketFinderJava.service.CourtService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class CourtController {
     @Autowired
     private CourtService courtService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @GetMapping("/public")
     @ResponseBody
     public List<CourtDto> getPublicCourts() {
@@ -32,8 +36,8 @@ public class CourtController {
     }
 
     @GetMapping("/{court}")
-    public Court getCourt(Court court) {
-        return court;
+    public CourtDto getCourt(Court court) {
+        return modelMapper.map(court, CourtDto.class);
     }
 
     @PostMapping()

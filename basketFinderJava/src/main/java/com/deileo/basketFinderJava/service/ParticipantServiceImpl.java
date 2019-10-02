@@ -76,7 +76,7 @@ public class ParticipantServiceImpl implements ParticipantService {
             throw new NotFoundException("Participant not found");
         }
 
-        participant.setConfirmed(true);
+        participant.setConfirmed(Boolean.TRUE);
 
         participantRepo.save(participant);
     }

@@ -20,6 +20,6 @@ public class JpaAuditingConfiguration implements AuditorAware<User> {
     public Optional<User> getCurrentAuditor() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return userRepository.findByEmail(auth.getName());
+        return userRepository.findByEmail(auth != null ? auth.getName() : "");
     }
 }

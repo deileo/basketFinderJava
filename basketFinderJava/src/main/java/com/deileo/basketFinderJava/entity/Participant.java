@@ -1,5 +1,7 @@
 package com.deileo.basketFinderJava.entity;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import javax.persistence.*;
 
 @Entity
@@ -19,7 +21,7 @@ public class Participant {
     private User user;
 
     @Column(nullable = false)
-    private Boolean isConfirmed = false;
+    private Boolean isConfirmed = Boolean.FALSE;
 
     public Participant () {}
 
