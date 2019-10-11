@@ -13,10 +13,10 @@ import java.util.Map;
 public class ValidationUtils {
 
     public Map<String, List<String>> getErrorsMap(BindingResult bindingResult) {
-        List<String> errorList = new ArrayList<>();
         Map<String, List<String>> errors = new HashMap<>();
 
         for (FieldError error : bindingResult.getFieldErrors()) {
+            List<String> errorList = new ArrayList<>();
             errorList.add(error.getDefaultMessage());
             if (!errors.containsKey(error.getField())) {
                 errors.put(error.getField(), errorList);

@@ -16,7 +16,6 @@ public class GeoCoderServiceImpl implements GeoCoderService {
     private GeoCoderContext context;
 
     public LatLng getGeoLocationByAddress(String address) throws InterruptedException, ApiException, IOException {
-
         GeocodingResult[] locations = GeocodingApi.geocode(context.getContext(), address).await();
 
         return locations.length > 0 ? locations[0].geometry.location : null;

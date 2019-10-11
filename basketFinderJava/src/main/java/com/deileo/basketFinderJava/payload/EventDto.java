@@ -1,5 +1,7 @@
 package com.deileo.basketFinderJava.payload;
 
+import com.deileo.basketFinderJava.validator.EventDateRangeConstraint;
+import com.deileo.basketFinderJava.validator.StringLocalDateTimeFutureConstraint;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@EventDateRangeConstraint(startTime = "startTime", endTime = "endTime")
 public class EventDto {
 
     private Integer id;
@@ -27,7 +30,7 @@ public class EventDto {
     private Double price = 0.0;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @NotNull
+    @StringLocalDateTimeFutureConstraint
     private String startTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")

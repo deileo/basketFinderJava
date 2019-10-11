@@ -24,7 +24,7 @@ class CreateEventForm extends Component {
     date: moment(),
     startTimeDate: moment(),
     court: this.props.court.id,
-    startTime: moment().format('YYYY-MM-DD hh:mm:00'),
+    startTime: moment().format('YYYY-MM-DD HH:mm:00'),
   };
 
   componentDidMount() {
@@ -55,12 +55,12 @@ class CreateEventForm extends Component {
 
   handleDateChange = (date) => {
     this.setState({date: date});
-    this.setState({startTime: date.format('YYYY-MM-DD') + ' ' + this.state.startTimeDate.format('hh:mm:00')});
+    this.setState({startTime: date.format('YYYY-MM-DD') + ' ' + this.state.startTimeDate.format('HH:mm:00')});
   };
 
   handleStartTimeDateChange = startTimeDate => {
     this.setState({startTimeDate: startTimeDate});
-    this.setState({startTime: this.state.date.format('YYYY-MM-DD') + ' ' + startTimeDate.format('hh:mm:00')});
+    this.setState({startTime: this.state.date.format('YYYY-MM-DD') + ' ' + startTimeDate.format('HH:mm:00')});
   };
 
   hasError(fieldName) {

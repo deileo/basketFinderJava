@@ -44,7 +44,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     @Override
     public List<ParticipantDto> getUnconfirmedParticipants() {
-
         List<ParticipantDto> participants = new ArrayList<>();
 
         participantRepo.getUnconfirmedParticipants(getCurrentUser()).forEach(participant -> {
@@ -57,7 +56,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     @Override
     public void joinEvent(Event event) {
-        Boolean isConfirmed = event.getCourt().getType().equals(CourtType.PUBLIC);
+        Boolean isConfirmed = event.getCourt().getType().equals(CourtType.PUBLIC) || event.getCreatedBy().equals(getCurrentUser());
 
         participantRepo.save(new Participant(event, getCurrentUser(), isConfirmed));
     }
