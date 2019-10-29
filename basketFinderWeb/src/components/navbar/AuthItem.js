@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { GoogleLogout} from "react-google-login";
-import { GOOGLE_AUTH_URL } from "../../config";
+import {ACCESS_TOKEN, GOOGLE_AUTH_URL} from "../../config";
 import Button from "@material-ui/core/Button/Button";
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import Popper from "@material-ui/core/Popper/Popper";
@@ -66,7 +66,7 @@ class AuthItem extends Component {
 
   render() {
     const {userReducer, classes} = this.props;
-    if (!localStorage.getItem('token') || !userReducer || !userReducer.isAuthenticated) {
+    if (!localStorage.getItem(ACCESS_TOKEN) || !userReducer || !userReducer.isAuthenticated) {
       return (
         <div>
           <a className="btn btn-block social-btn google" href={GOOGLE_AUTH_URL}>
