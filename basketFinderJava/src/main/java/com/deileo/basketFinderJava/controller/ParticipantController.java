@@ -21,14 +21,14 @@ public class ParticipantController {
 
     @GetMapping("/{event}")
     @ResponseBody
-    public List<ParticipantDto> getEventParticipants(Event event) {
-        return participantService.getEventParticipants(event);
+    public ResponseEntity<List<ParticipantDto>> getEventParticipants(Event event) {
+        return ResponseEntity.ok(participantService.getEventParticipants(event));
     }
 
     @GetMapping("/unconfirmed")
     @ResponseBody
-    public List<ParticipantDto> getUnconfirmedParticipants() {
-        return participantService.getUnconfirmedParticipants();
+    public ResponseEntity<List<ParticipantDto>> getUnconfirmedParticipants() {
+        return ResponseEntity.ok(participantService.getUnconfirmedParticipants());
     }
 
     @PostMapping("/join/{event}")
@@ -45,10 +45,10 @@ public class ParticipantController {
 
     @PostMapping("/leave/{event}")
     @ResponseBody
-    public ResponseEntity<String> leaveEvent(Event event) {
+    public ResponseEntity<String> leaveEvent(Event event) throws NotFoundException {
         participantService.leaveEvent(event);
 
-        return new ResponseEntity<>("Success!", HttpStatus.OK);
+        return ResponseEntity.ok("Success!");
     }
 
     @PostMapping("/accept/{event}/{user}")
@@ -56,14 +56,14 @@ public class ParticipantController {
     public ResponseEntity<String> acceptParticipant(Event event, User user) throws NotFoundException {
         participantService.acceptParticipant(event, user);
 
-        return new ResponseEntity<>("Success!", HttpStatus.OK);
+        return ResponseEntity.ok("Success!");
     }
 
     @PostMapping("/cancel/{event}/{user}")
     @ResponseBody
-    public ResponseEntity<String> cancelParticipant(Event event, User user) {
+    public ResponseEntity<String> cancelParticipant(Event event, User user) throws NotFoundException {
         participantService.removeParticipant(event, user);
 
-        return new ResponseEntity<>("Success!", HttpStatus.OK);
+        return ResponseEntity.ok("Success!");
     }
 }

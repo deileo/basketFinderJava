@@ -26,9 +26,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDto> getEventComments(Event event) {
         List<CommentDto> comments = new ArrayList<>();
-        for (Comment comment : commentRepository.getEventComments(event)) {
-            comments.add(convertToDto(comment));
-        }
+        commentRepository.getEventComments(event).forEach(comment -> comments.add(convertToDto(comment)));
 
         return comments;
     }
@@ -36,9 +34,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDto> getCourtComments(Court court) {
         List<CommentDto> comments = new ArrayList<>();
-        for (Comment comment : commentRepository.getCourtComments(court)) {
-            comments.add(convertToDto(comment));
-        }
+        commentRepository.getCourtComments(court).forEach(comment -> comments.add(convertToDto(comment)));
 
         return comments;
     }

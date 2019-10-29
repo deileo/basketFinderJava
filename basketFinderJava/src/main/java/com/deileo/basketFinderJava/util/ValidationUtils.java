@@ -15,13 +15,13 @@ public class ValidationUtils {
     public Map<String, List<String>> getErrorsMap(BindingResult bindingResult) {
         Map<String, List<String>> errors = new HashMap<>();
 
-        for (FieldError error : bindingResult.getFieldErrors()) {
+        bindingResult.getFieldErrors().forEach(fieldError -> {
             List<String> errorList = new ArrayList<>();
-            errorList.add(error.getDefaultMessage());
-            if (!errors.containsKey(error.getField())) {
-                errors.put(error.getField(), errorList);
+            errorList.add(fieldError.getDefaultMessage());
+            if (!errors.containsKey(fieldError.getField())) {
+                errors.put(fieldError.getField(), errorList);
             }
-        }
+        });
 
         return errors;
     }

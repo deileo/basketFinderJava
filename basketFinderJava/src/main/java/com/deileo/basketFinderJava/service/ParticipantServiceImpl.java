@@ -34,10 +34,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     @Override
     public List<ParticipantDto> getEventParticipants(Event event) {
         List<ParticipantDto> participants = new ArrayList<>();
-
-        for (Participant participant : event.getParticipants()) {
-            participants.add(convertToDto(participant.getUser()));
-        }
+        event.getParticipants().forEach(participant -> participants.add(convertToDto(participant.getUser())));
 
         return participants;
     }
@@ -62,18 +59,19 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public void leaveEvent(Event event) {
-        Participant participant = participantRepo.getParticipantByEventAndUser(event, getCurrentUser()).orElse(null);
+    public void leaveEvent(Event event) throws NotFoundException {
+        Participant participant = participantRepo.getParticipantByEventAndUser(event, getCurrentUser()).orElseThrow(
+            () -> new NotFoundException("Participant not found")
+        );
 
         participantRepo.delete(participant);
     }
 
     @Override
     public void acceptParticipant(Event event, User user) throws NotFoundException {
-        Participant participant = participantRepo.getParticipantByEventAndUser(event, user).orElse(null);
-        if (participant == null) {
-            throw new NotFoundException("Participant not found");
-        }
+        Participant participant = participantRepo.getParticipantByEventAndUser(event, user).orElseThrow(
+            () -> new NotFoundException("Participant not found")
+        );
 
         participant.setConfirmed(Boolean.TRUE);
 
@@ -81,8 +79,10 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public void removeParticipant(Event event, User user) {
-        Participant participant = participantRepo.getParticipantByEventAndUser(event, user).orElse(null);
+    public void removeParticipant(Event event, User user) throws NotFoundException {
+        Participant participant = participantRepo.getParticipantByEventAndUser(event, user).orElseThrow(
+            () -> new NotFoundException("Participant not found")
+        );
 
         participantRepo.delete(participant);
     }

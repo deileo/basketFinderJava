@@ -1,7 +1,5 @@
 package com.deileo.basketFinderJava.entity;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import javax.persistence.*;
 
 @Entity
