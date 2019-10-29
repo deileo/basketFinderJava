@@ -26,13 +26,13 @@ public class CommentController {
     @GetMapping ("/event/{event}")
     @ResponseBody
     public ResponseEntity<List<CommentDto>> getEventComments(Event event) {
-        return new ResponseEntity<>(commentService.getEventComments(event), HttpStatus.OK);
+        return ResponseEntity.ok(commentService.getEventComments(event));
     }
 
     @GetMapping ("/court/{court}")
     @ResponseBody
     public ResponseEntity<List<CommentDto>> getCourtComments(Court court) {
-        return new ResponseEntity<>(commentService.getCourtComments(court), HttpStatus.OK);
+        return ResponseEntity.ok(commentService.getCourtComments(court));
     }
 
     @PostMapping("/new")

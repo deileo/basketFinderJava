@@ -10,13 +10,13 @@ import java.util.Optional;
 public class CookieUtils {
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
-        Cookie[] cookies = request.getCookies();
+        if (request.getCookies().length == 0) {
+            return Optional.empty();
+        }
 
-        if (cookies != null && cookies.length > 0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(name)) {
-                    return Optional.of(cookie);
-                }
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals(name)) {
+                return Optional.of(cookie);
             }
         }
 
@@ -32,15 +32,16 @@ public class CookieUtils {
     }
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length > 0) {
-            for (Cookie cookie: cookies) {
-                if (cookie.getName().equals(name)) {
-                    cookie.setValue("");
-                    cookie.setPath("/");
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
-                }
+        if (request.getCookies().length == 0) {
+            return;
+        }
+
+        for (Cookie cookie: request.getCookies()) {
+            if (cookie.getName().equals(name)) {
+                cookie.setValue("");
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
             }
         }
     }

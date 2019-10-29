@@ -7,8 +7,6 @@ import java.time.format.DateTimeFormatter;
 
 public class StringLocalDateTimeFutureValidator implements ConstraintValidator<StringLocalDateTimeFutureConstraint, String> {
 
-    public void initialize(StringLocalDateTimeFutureValidator dateTimeConstraint) {}
-
     public boolean isValid(String dateTime, ConstraintValidatorContext context) {
 
         if (dateTime.isEmpty()) {

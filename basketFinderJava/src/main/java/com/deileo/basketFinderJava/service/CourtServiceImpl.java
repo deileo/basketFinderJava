@@ -26,9 +26,7 @@ public class CourtServiceImpl implements CourtService {
     @Override
     public List<CourtDto> findAll() {
         List<CourtDto> courts = new ArrayList<>();
-        for (Court court : courtRepo.findAll()) {
-            courts.add(convertToDto(court));
-        }
+        courtRepo.findAll().forEach(court -> courts.add(convertToDto(court)));
 
         return courts;
     }
@@ -55,9 +53,7 @@ public class CourtServiceImpl implements CourtService {
     @Override
     public List<CourtDto> getCourtsByType(CourtType type) {
         List<CourtDto> courts = new ArrayList<>();
-        for (Court court : courtRepo.getCourtsByType(type)) {
-            courts.add(convertToDto(court));
-        }
+        courtRepo.getCourtsByType(type).forEach(court -> courts.add(convertToDto(court)));
 
         return courts;
     }

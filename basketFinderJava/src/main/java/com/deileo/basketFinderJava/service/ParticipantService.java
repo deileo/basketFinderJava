@@ -15,9 +15,9 @@ public interface ParticipantService {
 
     public void joinEvent(Event event);
 
-    public void leaveEvent(Event event);
+    public void leaveEvent(Event event) throws NotFoundException;
 
     public void acceptParticipant(Event event, User user) throws NotFoundException;
 
-    public void removeParticipant(Event event, User user);
+    public void removeParticipant(Event event, User user) throws NotFoundException;
 }

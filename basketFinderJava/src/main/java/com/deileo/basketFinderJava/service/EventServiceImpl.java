@@ -18,9 +18,6 @@ import java.util.List;
 public class EventServiceImpl implements EventService {
 
     @Autowired
-    private ParticipantService participantService;
-
-    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -29,9 +26,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventDto> findAll() {
         List<EventDto> events = new ArrayList<>();
-        for (Event event : eventRepo.findAll()) {
-            events.add(convertToDto(event));
-        }
+        eventRepo.findAll().forEach(event -> events.add(convertToDto(event)));
 
         return events;
     }
@@ -54,9 +49,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventDto> getCourtEvents(Court court) {
         List<EventDto> events = new ArrayList<>();
-        for (Event event : eventRepo.getCourtEvents(court)) {
-            events.add(convertToDto(event));
-        }
+        eventRepo.getCourtEvents(court).forEach(event -> events.add(convertToDto(event)));
 
         return events;
     }
@@ -64,9 +57,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventDto> getEventsByCourtType(CourtType type) {
         List<EventDto> events = new ArrayList<>();
-        for (Event event : eventRepo.getEventsByCourtType(type)) {
-            events.add(convertToDto(event));
-        }
+        eventRepo.getEventsByCourtType(type).forEach(event -> events.add(convertToDto(event)));
 
         return events;
     }
@@ -96,9 +87,9 @@ public class EventServiceImpl implements EventService {
 
     private Integer getConfirmedParticipantsCount(Event event) {
         return (int) event.getParticipants()
-                        .stream()
-                        .filter(participant -> participant.getConfirmed().equals(true))
-                        .count();
+                .stream()
+                .filter(participant -> participant.getConfirmed().equals(true))
+                .count();
     }
 
     private List<ParticipantDto> getConfirmedParticipantsList(Event event) {

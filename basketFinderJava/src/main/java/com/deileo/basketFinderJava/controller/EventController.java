@@ -31,26 +31,26 @@ public class EventController {
 
     @GetMapping()
     @ResponseBody
-    public List<EventDto> getEvents() {
-        return eventService.findAll();
+    public ResponseEntity<List<EventDto>> getEvents() {
+        return ResponseEntity.ok(eventService.findAll());
     }
 
     @GetMapping("/public")
     @ResponseBody
-    public List<EventDto> getPublicEvents() {
-        return eventService.getEventsByCourtType(CourtType.PUBLIC);
+    public ResponseEntity<List<EventDto>> getPublicEvents() {
+        return ResponseEntity.ok(eventService.getEventsByCourtType(CourtType.PUBLIC));
     }
 
     @GetMapping("/private")
     @ResponseBody
-    public List<EventDto> getPrivateEvents() {
-        return eventService.getEventsByCourtType(CourtType.PRIVATE);
+    public ResponseEntity<List<EventDto>> getPrivateEvents() {
+        return ResponseEntity.ok(eventService.getEventsByCourtType(CourtType.PRIVATE));
     }
 
     @GetMapping("/court/{court}")
     @ResponseBody
-    public List<EventDto> getCourtEvents(Court court) {
-        return eventService.getCourtEvents(court);
+    public ResponseEntity<List<EventDto>> getCourtEvents(Court court) {
+        return ResponseEntity.ok(eventService.getCourtEvents(court));
     }
 
     @GetMapping("/user")
@@ -67,8 +67,8 @@ public class EventController {
 
     @GetMapping("/{event}")
     @ResponseBody
-    public Event getEvent(Event event) {
-        return event;
+    public ResponseEntity<Event> getEvent(Event event) {
+        return ResponseEntity.ok(event);
     }
 
     @PostMapping("/new")
