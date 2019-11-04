@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -50,6 +51,11 @@ public class Event extends DateAudit {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Participant> participants;
+
+    public Event() {
+        participants = new ArrayList<>();
+        comments = new ArrayList<>();
+    }
 
     public Integer getId() {
         return id;

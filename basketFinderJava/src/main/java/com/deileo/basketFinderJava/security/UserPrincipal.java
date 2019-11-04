@@ -12,10 +12,15 @@ import java.util.List;
 import java.util.Map;
 
 public class UserPrincipal implements OAuth2User, UserDetails {
+
     private Integer id;
+
     private String email;
+
     private String password;
+
     private Collection<? extends GrantedAuthority> authorities;
+
     private Map<String, Object> attributes;
 
     public UserPrincipal(Integer id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
@@ -40,6 +45,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     public static UserPrincipal create(User user, Map<String, Object> attributes) {
         UserPrincipal userPrincipal = UserPrincipal.create(user);
         userPrincipal.setAttributes(attributes);
+
         return userPrincipal;
     }
 
