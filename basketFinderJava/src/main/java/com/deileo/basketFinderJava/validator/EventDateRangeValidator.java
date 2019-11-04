@@ -1,12 +1,14 @@
 package com.deileo.basketFinderJava.validator;
 
 import com.deileo.basketFinderJava.payload.EventDto;
+import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Component
 public class EventDateRangeValidator implements ConstraintValidator<EventDateRangeConstraint, EventDto> {
 
     private static final String dateFormat = "yyyy-MM-dd HH:mm:ss";

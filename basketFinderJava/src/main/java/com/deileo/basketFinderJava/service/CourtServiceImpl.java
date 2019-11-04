@@ -36,7 +36,6 @@ public class CourtServiceImpl implements CourtService {
         Optional<Court> court = courtRepo.findById(id);
 
         return court.map(this::convertToDto).orElse(null);
-
     }
 
     @Override
