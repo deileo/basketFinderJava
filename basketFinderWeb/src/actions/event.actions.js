@@ -16,6 +16,7 @@ import {
   createEvent,
   joinEvent,
   getEvents,
+  getCourtEvents,
   leaveEvent,
   getUserCreatedEvents,
   getUserJoinedEvents,
@@ -23,9 +24,9 @@ import {
   editEvent, getAllEvents
 } from '../services/eventService';
 
-export const createEventAction = (createEventData, type) => {
+export const createEventAction = (createEventData) => {
   return function(dispatch) {
-    return createEvent(createEventData, type)
+    return createEvent(createEventData)
       .then(response => {
         if (response.status === 201) {
           dispatch({type: CREATE_EVENT_MODAL_CLOSED, payload: {isOpen: false}});
@@ -33,11 +34,10 @@ export const createEventAction = (createEventData, type) => {
 
           return dispatch({type: CREATE_EVENT, payload: response.data});
         }
-        if (response.status === 200) {
-          return dispatch({ type: CREATE_EVENT_ERROR, payload: response.data });
-        }
       })
       .catch(error => {
+        dispatch({ type: CREATE_EVENT_ERROR, payload: error.response.data });
+
         return showConsoleError(error);
       });
   };
@@ -62,9 +62,9 @@ export const editEventAction = (eventData, eventId, type) => {
   };
 };
 
-export const joinEventAction = (eventId, type) => {
+export const joinEventAction = (eventId) => {
   return function(dispatch) {
-    return joinEvent(eventId, type)
+    return joinEvent(eventId)
       .then(response => {
         if (response.status === 201) {
           dispatch({type: FLASH_MESSAGE, payload: {isOpen: true, message: 'Prisijungta į rungtynes!', variant: 'success'}});
@@ -79,9 +79,9 @@ export const joinEventAction = (eventId, type) => {
   };
 };
 
-export const leaveEventAction = (eventId, type) => {
+export const leaveEventAction = (eventId) => {
   return function(dispatch) {
-    return leaveEvent(eventId, type)
+    return leaveEvent(eventId)
       .then(response => {
         dispatch({type: FLASH_MESSAGE, payload: {isOpen: true, message: 'Nutrauktas dalyvavimas!', variant: 'success'}});
 
@@ -93,11 +93,28 @@ export const leaveEventAction = (eventId, type) => {
   };
 };
 
-export const getEventsAction = (type, courtId = null) => {
+export const getEventsAction = (type) => {
   return function(dispatch) {
     dispatch({ type: LOADING_EVENTS_STARTED });
 
-    return getEvents(type, courtId)
+    return getEvents(type)
+      .then(response => {
+        return dispatch({ type: GET_EVENTS, payload: response.data });
+      })
+      .catch(error => {
+        return showConsoleError(error);
+      })
+      .finally(() => {
+        dispatch({ type: LOADING_EVENTS_ENDED });
+      })
+  };
+};
+
+export const getCourtEventsAction = (courtId) => {
+  return function(dispatch) {
+    dispatch({ type: LOADING_EVENTS_STARTED });
+
+    return getCourtEvents(courtId)
       .then(response => {
         return dispatch({ type: GET_EVENTS, payload: response.data });
       })

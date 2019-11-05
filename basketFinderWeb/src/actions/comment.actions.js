@@ -5,14 +5,11 @@ import {
   LOADING_COMMENTS_ENDED,
   LOADING_COMMENTS_STARTED
 } from "./types";
-import {
-  createCourtComment, createEventComment,
-  getCourtComments, getEventComments
-} from '../services/commentService';
+import {createComment, getCourtComments, getEventComments} from '../services/commentService';
 
-export const createCourtCommentAction = (commentData, court, type) => {
+export const createCommentAction = (commentData) => {
   return function (dispatch) {
-    return createCourtComment(commentData, court, type)
+    return createComment(commentData)
       .then(response => {
         return dispatch({type: NEW_COMMENT})
       })
@@ -22,23 +19,11 @@ export const createCourtCommentAction = (commentData, court, type) => {
   }
 };
 
-export const createEventCommentAction = (commentData, event, type) => {
-  return function (dispatch) {
-    return createEventComment(commentData, event, type)
-      .then(response => {
-        return dispatch({type: NEW_COMMENT})
-      })
-      .catch(error => {
-        return showConsoleError(error);
-      });
-  }
-};
-
-export const getCourtCommentsAction = (court, type) => {
+export const getCourtCommentsAction = (court) => {
   return function (dispatch) {
     dispatch({ type: LOADING_COMMENTS_STARTED });
 
-    return getCourtComments(court, type)
+    return getCourtComments(court)
       .then(response => {
         return dispatch({type: GET_COMMENTS, payload: response.data})
       })
@@ -51,11 +36,11 @@ export const getCourtCommentsAction = (court, type) => {
   }
 };
 
-export const getEventCommentsAction = (event, type) => {
+export const getEventCommentsAction = (event) => {
   return function (dispatch) {
     dispatch({ type: LOADING_COMMENTS_STARTED });
 
-    return getEventComments(event, type)
+    return getEventComments(event)
       .then(response => {
         return dispatch({type: GET_COMMENTS, payload: response.data})
       })

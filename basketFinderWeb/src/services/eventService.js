@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from 'moment';
 import {TYPE_COURT, TYPE_GYM_COURT} from "../actions/types";
 import {ACCESS_TOKEN, API_URL} from "../config";
 
@@ -10,53 +11,60 @@ const config = {
 };
 
 
-export function createEvent(eventData, type = TYPE_COURT) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+export function createEvent(eventData) {
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
-  let url = API_URL + '/events/' + type +'/new';
+  let url = API_URL + '/events/new';
 
   return axios.post(url, eventData, config);
 }
 
 export function editEvent(eventData, eventId, type = TYPE_COURT) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/events/' + type + '/' + eventId + '/edit';
 
   return axios.post(url, eventData, config);
 }
 
-export function joinEvent(eventId, type) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+export function joinEvent(eventId) {
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
-  return axios.post(
-    API_URL + '/events/' + type + '/' + eventId + '/join', {},
-    config
-  );
+  return axios.post(API_URL + '/participants/join/' + eventId, {}, config);
 }
 
-export function leaveEvent(eventId, type) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+export function leaveEvent(eventId) {
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
-  let url = API_URL + '/events/' + type + '/' + eventId + '/leave';
-
-  return axios.post(url, {}, config);
+  return axios.post(API_URL + '/participants/leave/' + eventId, {}, config);
 }
 
-export function getEvents(type, courtId = null) {
+export function getEvents(type) {
   if (!type) {
     type = TYPE_COURT;
   }
-
-  let url = courtId ?
-    API_URL + '/events/' + type + '/' + courtId :
-    API_URL + '/events';
 
   if(localStorage.getItem(ACCESS_TOKEN)) {
     config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
   }
 
-  return axios.get(url, config);
+  return axios.get(API_URL + '/events/' + type, config);
+}
+
+export function getCourtEvents(courtId) {
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
+
+  return axios.get(API_URL + '/events/court/' + courtId, config);
 }
 
 export function getAllEvents() {
@@ -64,7 +72,9 @@ export function getAllEvents() {
 }
 
 export function getUserCreatedEvents() {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/events/user';
 
@@ -72,7 +82,9 @@ export function getUserCreatedEvents() {
 }
 
 export function getUserJoinedEvents() {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/events/user/joined/events';
 
@@ -80,7 +92,9 @@ export function getUserJoinedEvents() {
 }
 
 export function deleteEvent(eventId, type) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
   let url = API_URL + '/events/' + type + '/' + eventId + '/delete';
 
@@ -88,10 +102,10 @@ export function deleteEvent(eventId, type) {
 }
 
 export const getEventTime = (event, type) => {
-  let eventTime = event.date + ' ' + event.startTime;
+  let eventTime = moment(event.startTime).format('YYYY-MM-DD hh:mm');
 
   if (type === TYPE_GYM_COURT && event.endTime) {
-    eventTime += ' - ' + event.endTime;
+    eventTime += ' - ' + moment(event.endTime).format('hh:mm');
   }
 
   return eventTime;

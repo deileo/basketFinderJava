@@ -1,39 +1,44 @@
 package com.deileo.basketFinderJava.service;
 
-import com.deileo.basketFinderJava.entity.Court;
-import com.deileo.basketFinderJava.entity.Event;
+import com.deileo.basketFinderJava.entity.*;
+import com.deileo.basketFinderJava.payload.ParticipantDto;
 import com.deileo.basketFinderJava.repository.EventRepository;
+import com.deileo.basketFinderJava.payload.EventDto;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Service
 public class EventServiceImpl implements EventService {
 
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     private EventRepository eventRepo;
 
-    public EventServiceImpl(EventRepository eventRepo) {
-        this.eventRepo = eventRepo;
-    }
-
     @Override
-    public List<Event> findAll() {
-        return eventRepo.findAll();
+    public List<EventDto> findAll() {
+        List<EventDto> events = new ArrayList<>();
+        eventRepo.findAll().forEach(event -> events.add(convertToDto(event)));
+
+        return events;
     }
 
     @Override
     public Event find(Integer id) {
-        Optional<Event> event = eventRepo.findById(id);
-
-        return event.orElse(null);
+        return eventRepo.findById(id).orElse(null);
     }
 
     @Override
-    public void save(Event event) {
-        eventRepo.save(event);
+    public void save(EventDto event) throws ParseException {
+        eventRepo.save(convertToEntity(event));
     }
 
     @Override
@@ -42,7 +47,70 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getCourtEvents(Court court) {
-        return eventRepo.getCourtEvents(court);
+    public List<EventDto> getCourtEvents(Court court) {
+        List<EventDto> events = new ArrayList<>();
+        eventRepo.getCourtEvents(court).forEach(event -> events.add(convertToDto(event)));
+
+        return events;
+    }
+
+    @Override
+    public List<EventDto> getEventsByCourtType(CourtType type) {
+        List<EventDto> events = new ArrayList<>();
+        eventRepo.getEventsByCourtType(type).forEach(event -> events.add(convertToDto(event)));
+
+        return events;
+    }
+
+    private Event convertToEntity(EventDto eventDto) throws ParseException {
+        Event event = modelMapper.map(eventDto, Event.class);
+
+        event.setStartTime(eventDto.convertStartTimeToDateTimeObject());
+
+        if (eventDto.getEndTime() != null) {
+            event.setEndTime(eventDto.convertEndTimeToDateTimeObject());
+        }
+
+        return event;
+    }
+
+    private EventDto convertToDto(Event event) {
+        EventDto eventDto = modelMapper.map(event, EventDto.class);
+
+        eventDto.setJoinedPlayers(getConfirmedParticipantsCount(event));
+        eventDto.setCommentsCount(event.getComments().size());
+        eventDto.setParticipants(getConfirmedParticipantsList(event));
+        eventDto.setUnconfirmedParticipants(getUnconfirmedParticipantsList(event));
+
+        return eventDto;
+    }
+
+    private Integer getConfirmedParticipantsCount(Event event) {
+        return (int) event.getParticipants()
+                .stream()
+                .filter(participant -> participant.getConfirmed().equals(true))
+                .count();
+    }
+
+    private List<ParticipantDto> getConfirmedParticipantsList(Event event) {
+        List<ParticipantDto> participantDtos = new ArrayList<>();
+        event.getParticipants().forEach(participant -> {
+            if (participant.getConfirmed()) {
+                participantDtos.add(modelMapper.map(participant.getUser(), ParticipantDto.class));
+            }
+        });
+
+        return participantDtos;
+    }
+
+    private List<ParticipantDto> getUnconfirmedParticipantsList(Event event) {
+        List<ParticipantDto> participantDtos = new ArrayList<>();
+        event.getParticipants().forEach(participant -> {
+            if (!participant.getConfirmed()) {
+                participantDtos.add(modelMapper.map(participant.getUser(), ParticipantDto.class));
+            }
+        });
+
+        return participantDtos;
     }
 }

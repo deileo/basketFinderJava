@@ -9,7 +9,7 @@ import InfoModal from "./InfoModal";
 import Modal from "@material-ui/core/Modal/Modal";
 import {TYPE_GYM_COURT} from "../../actions/types";
 import {eventStyles, modalStyles} from "../styles";
-import {getConfirmedParticipantsCount, getEventTime} from "../../services/eventService";
+import {getEventTime} from "../../services/eventService";
 import {connect} from "react-redux";
 import * as actions from './../../actions';
 import Comments from "../comment/Comments";
@@ -37,61 +37,42 @@ class Event extends Component {
     this.setState({commentModalOpen: false});
   };
 
-
   handleJoin = () => {
-    const {event, type} = this.props;
-    this.props.joinEventAction(event.id, type);
+    const {event} = this.props;
+    this.props.joinEventAction(event.id);
   };
 
   handleLeave = () => {
-    const {event, type} = this.props;
-    this.props.leaveEventAction(event.id, type);
+    const {event} = this.props;
+    this.props.leaveEventAction(event.id);
   };
 
-  renderEventJoinActions = (userReducer, event, type) => {
+  renderEventJoinActions = (userReducer, event) => {
     if (!userReducer.isAuthenticated) {
       return null;
     }
-
-    let joinedUserList = event.participants.filter(function (participant) {
-      return type === TYPE_GYM_COURT ?
-        participant.user && participant.user.id === userReducer.auth.id :
-        participant.id === userReducer.auth.id;
+    let joined = event.participants.filter(function (participant) {
+      return participant.id === userReducer.user.id;
     });
 
+    let unconfirmed = event.unconfirmedParticipants.filter(function (participant) {
+      return participant.id === userReducer.user.id;
+    });
 
-    if (joinedUserList.length > 0) {
-      if (type === TYPE_GYM_COURT) {
-        let confirmedUsers = joinedUserList.filter(function (participant) {
-          return participant.isConfirmed === true;
-        });
-
-        if (confirmedUsers.length > 0) {
-          return (
-            <Button size="small" variant="contained" color="secondary" onClick={this.handleLeave}>
-              Išeiti
-            </Button>
-          )
-        } else {
-          return (
-            <Button size="small" variant="contained" color="inherit" disabled={true}>
-              Prašymas išsiųstas
-            </Button>
-          )
-        }
-      }
-
+    if (joined.length) {
       return (
-        <Button size="small" variant="contained" color="secondary" onClick={this.handleLeave}>
-          Išeiti
-        </Button>
+        <Button size="small" variant="contained" color="secondary" onClick={this.handleLeave}>Išeiti</Button>
+      )
+    }
+
+    if (unconfirmed.length) {
+      return (
+        <Button size="small" variant="contained" color="secondary" disabled={true}>Prašymas išsiųstas</Button>
       )
     }
 
     return (
-      <Button size="small" variant="contained" color="primary" onClick={this.handleJoin}>
-        {this.props.type === TYPE_GYM_COURT ? 'Siųsti prašymą' : 'Prisijungti'}
-      </Button>
+      <Button size="small" variant="contained" color="primary" onClick={this.handleJoin}>Prisijungti</Button>
     );
   };
 
@@ -109,10 +90,10 @@ class Event extends Component {
             Laikas: {getEventTime(event, type)}
           </Typography>
           <Typography variant="body1" gutterBottom className={classes.eventContent}>
-            Adresas: {event.court ? event.court.address : event.gymCourt.address}
+            Adresas: {event.court.address}
           </Typography>
           <Typography variant="body1" gutterBottom className={classes.eventContent}>
-            Žaidėjai: {type === TYPE_GYM_COURT ? getConfirmedParticipantsCount(event) : event.participants.length}/{event.neededPlayers}
+            Žaidėjai: {event.joinedPlayers}/{event.neededPlayers}
           </Typography>
           {type === TYPE_GYM_COURT && event.price > 0 ?
             <Typography variant="body1" gutterBottom className={classes.eventContent}>
@@ -125,13 +106,13 @@ class Event extends Component {
             </Typography> : ''
           }
           <CardActions>
-            {this.renderEventJoinActions(this.props.userReducer, event, type)}
+            {this.renderEventJoinActions(this.props.userReducer, event)}
             <Button size="small" variant="outlined" color="primary" onClick={this.handleOpenInfoModalClick}>
               Žaidėjai
             </Button>
 
             <Button size="small" variant="outlined" color="primary" onClick={() => this.handleCommentOpen()}>
-              Komentarai {this.props.commentsCount > 0 ? ' (' + this.props.commentsCount + ')' : null}
+              Komentarai {event.commentsCount > 0 ? ' (' + event.commentsCount + ')' : null}
             </Button>
 
             <Modal

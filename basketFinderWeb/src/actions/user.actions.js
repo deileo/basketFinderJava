@@ -1,4 +1,4 @@
-import {checkUser, disableUser, enableUser, getAllUsers} from "../services/userService";
+import {getUser, disableUser, enableUser, getAllUsers} from "../services/userService";
 import {
   GET_USER, GET_USERS,
   LOADING_EVENTS_ENDED,
@@ -7,20 +7,12 @@ import {
   RESET_RELOAD_USER_TYPE, FLASH_MESSAGE, LOADING_EVENTS_STARTED
 } from "./types";
 
-export const checkUserAction = userToken => {
+export const getUserAction = token => {
   return function(dispatch) {
-    return checkUser(userToken)
-      .then(response => {
-        if (response.status === 200) {
-          return dispatch({ type: GET_USER, payload: response.data });
-        } else {
-          return dispatch({ type: GET_USER, payload: null });
-        }
-      })
-      .catch(error => {
-        return showConsoleError(error);
-      });
-  };
+    return getUser(token).then(response => {
+      return dispatch({type: GET_USER, payload: response.data});
+    });
+  }
 };
 
 export const disableUserAction = (user) => {

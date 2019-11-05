@@ -16,6 +16,7 @@ import java.util.List;
 
 @Service
 public class CourtReader {
+
     private static final String TYPE_PRIVATE_COURT = "Vidaus";
 
     private GeoCoderService geoCoderService;

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import {withStyles} from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -20,9 +21,10 @@ class CreateEventForm extends Component {
     name: '',
     comment: '',
     neededPlayers: 1,
-    date: new Date(),
-    startTime: new Date(),
+    date: moment(),
+    startTimeDate: moment(),
     court: this.props.court.id,
+    startTime: moment().format('YYYY-MM-DD HH:mm:00'),
   };
 
   componentDidMount() {
@@ -33,8 +35,8 @@ class CreateEventForm extends Component {
         name: event.name,
         comment: event.comment ? event.comment : '',
         neededPlayers: event.neededPlayers,
-        date: new Date(event.date),
-        startTime: new Date(event.date + ' ' +event.startTime),
+        date: moment(event.date),
+        startTimeDate: moment(event.date + ' ' + event.startTime),
       });
     }
   }
@@ -53,10 +55,12 @@ class CreateEventForm extends Component {
 
   handleDateChange = (date) => {
     this.setState({date: date});
+    this.setState({startTime: date.format('YYYY-MM-DD') + ' ' + this.state.startTimeDate.format('HH:mm:00')});
   };
 
-  handleStartTimeChange = startTime => {
-    this.setState({startTime: startTime});
+  handleStartTimeDateChange = startTimeDate => {
+    this.setState({startTimeDate: startTimeDate});
+    this.setState({startTime: this.state.date.format('YYYY-MM-DD') + ' ' + startTimeDate.format('HH:mm:00')});
   };
 
   hasError(fieldName) {
@@ -79,7 +83,7 @@ class CreateEventForm extends Component {
 
   handleSubmit = () => {
     if (!this.props.event) {
-      this.props.createEventAction(this.state, TYPE_COURT);
+      this.props.createEventAction(this.state);
     } else {
       this.props.editEventAction(this.state, this.props.event.id, TYPE_COURT);
     }
@@ -87,7 +91,7 @@ class CreateEventForm extends Component {
 
   render() {
     const {classes, court, handleClose} = this.props;
-    const {neededPlayers, date, startTime, name, comment} = this.state;
+    const {neededPlayers, date, startTimeDate, name, comment} = this.state;
 
     return (
       <div>
@@ -117,15 +121,16 @@ class CreateEventForm extends Component {
 
             <Grid item sm={6}>
               <FormControl margin="normal" required fullWidth>
-                <DatePicker autoOk
-                            label="Data"
-                            disablePast
-                            value={date}
-                            required={true}
-                            error={this.hasError('date')}
-                            format="YYYY-MM-DD"
-                            onChange={this.handleDateChange}
-                            variant="outlined"
+                <DatePicker
+                  autoOk
+                  label="Data"
+                  disablePast
+                  value={date}
+                  required={true}
+                  error={this.hasError('date')}
+                  format="YYYY-MM-DD"
+                  onChange={this.handleDateChange}
+                  variant="outlined"
                 />
                 {this.getErrorMessage('date')}
               </FormControl>
@@ -133,14 +138,15 @@ class CreateEventForm extends Component {
 
             <Grid item sm={6}>
               <FormControl margin="normal" required fullWidth>
-                <TimePicker autoOk
-                            ampm={false}
-                            label="Pradžios laikas"
-                            value={startTime}
-                            required={true}
-                            onChange={this.handleStartTimeChange}
-                            variant="outlined"
-                            error={this.hasError('startTime')}
+                <TimePicker
+                  autoOk
+                  ampm={false}
+                  label="Pradžios laikas"
+                  value={startTimeDate}
+                  required={true}
+                  onChange={this.handleStartTimeDateChange}
+                  variant="outlined"
+                  error={this.hasError('startTime')}
                 />
                 {this.getErrorMessage('startTime')}
               </FormControl>
@@ -151,13 +157,14 @@ class CreateEventForm extends Component {
                 <InputLabel error={this.hasError('neededPlayers')}>
                   Reikiamas žaidėjų skaičius: {neededPlayers}
                 </InputLabel>
-                <Slider value={neededPlayers}
-                        min={1}
-                        max={10}
-                        step={1}
-                        onChange={this.handleNeededPlayersChange}
-                        style={{marginBottom: 30}}
-                        required={true}
+                <Slider
+                  value={neededPlayers}
+                  min={1}
+                  max={10}
+                  step={1}
+                  onChange={this.handleNeededPlayersChange}
+                  style={{marginBottom: 30}}
+                  required={true}
                 />
                 {this.getErrorMessage('neededPlayers')}
               </FormControl>
@@ -181,12 +188,13 @@ class CreateEventForm extends Component {
             </Grid>
           </Grid>
 
-          <Button type="button"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                  onClick={this.handleSubmit}
+          <Button
+            type="button"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={this.handleSubmit}
           >
             {this.props.event ? 'Redaguoti' : 'Sukurti'}
           </Button>

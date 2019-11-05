@@ -5,8 +5,6 @@ import IconButton from "@material-ui/core/IconButton/IconButton";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
-import {connect} from "react-redux";
-import * as actions from "../../actions";
 import {withStyles} from "@material-ui/core";
 import {eventStyles} from "../styles";
 import {isArrayNotEmpty} from "../../services/eventService";
@@ -21,17 +19,8 @@ class InfoModal extends Component {
     this.props.onClose();
   };
 
-  componentDidMount() {
-    const {event, type} = this.props;
-    this.props.getEventParticipantsAction(event, type);
-  }
-
-  componentWillUnmount() {
-    this.props.resetEventParticipantsAction();
-  }
-
   render() {
-    const {classes, participantReducer, event} = this.props;
+    const {classes, event} = this.props;
 
     return (
       <div>
@@ -47,10 +36,10 @@ class InfoModal extends Component {
           <DialogContent style={{paddingBottom: 0}}>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src={event.createdBy.googleImage}/>
+                <Avatar alt="Remy Sharp" src={event.createdBy.imageUrl}/>
               </ListItemAvatar>
               <ListItemText
-                primary={event.createdBy.firstName + ' ' + event.createdBy.lastName}
+                primary={event.createdBy.name}
                 secondary={'El. paštas: ' + event.createdBy.email}
               />
             </ListItem>
@@ -65,14 +54,14 @@ class InfoModal extends Component {
           </DialogTitle>
           <DialogContent>
             <List className={classes.root}>
-              {isArrayNotEmpty(participantReducer.eventParticipants) ? participantReducer.eventParticipants.map(participant => {
+              {isArrayNotEmpty(event.participants) ? event.participants.map(participant => {
                 return (
                   <ListItem alignItems="flex-start" key={participant.id}>
                     <ListItemAvatar>
-                      <Avatar alt="Remy Sharp" src={participant.googleImage}/>
+                      <Avatar alt="Remy Sharp" src={participant.imageUrl}/>
                     </ListItemAvatar>
                     <ListItemText
-                      primary={participant.firstName + ' ' + participant.lastName}
+                      primary={participant.name}
                       secondary={'El. paštas: ' + participant.email}
                     />
                   </ListItem>
@@ -86,10 +75,4 @@ class InfoModal extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    participantReducer: state.participantReducer,
-  };
-};
-
-export default connect(mapStateToProps, actions)(withStyles(eventStyles)(InfoModal));
+export default withStyles(eventStyles)(InfoModal);

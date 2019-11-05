@@ -1,13 +1,13 @@
 package com.deileo.basketFinderJava.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="events")
@@ -20,40 +20,49 @@ public class Event extends DateAudit {
     private Integer id;
 
     @Column(nullable = false)
-    @NotBlank
     private String name;
 
     @Column(nullable = false)
-    @NotNull
-    @Positive
     private Integer neededPlayers = 0;
 
     @Column()
     private String description;
 
     @Column(scale = 2)
-    @PositiveOrZero
     private Double price = 0.0;
 
     @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @NotNull
-    @FutureOrPresent
     private LocalDateTime startTime;
 
     @Column()
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @NotNull
-    @FutureOrPresent
     private LocalDateTime endTime;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    @NotNull
     private Court court;
+
+    @CreatedBy
+    @ManyToOne
+    @JoinColumn(name = "created_by", nullable = false)
+    private User createdBy;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Participant> participants;
+
+    public Event() {
+        participants = new ArrayList<>();
+        comments = new ArrayList<>();
+    }
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -112,9 +121,37 @@ public class Event extends DateAudit {
         this.court = court;
     }
 
-    @JsonProperty("court")
-    private void unpackNested(Integer court) {
-        this.court = new Court();
-        this.court.setId(court);
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void addComment(Comment comment) {
+        if (!comments.contains(comment)) {
+            comments.add(comment);
+            comment.setEvent(this);
+        }
+    }
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void addParticipant(Participant participant) {
+        if (!participants.contains(participant)) {
+            participants.add(participant);
+            participant.setEvent(this);
+        }
+    }
+
+    public void removeParticipant(Participant participant) {
+        participants.remove(participant);
     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -39,6 +40,15 @@ public class User {
 
     @Column
     private String providerId;
+
+    @OneToMany(mappedBy = "createdBy")
+    private List<Event> createdEvents;
+
+    @OneToMany(mappedBy = "createdBy")
+    private List<Comment> eventComments;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Participant> joinedEvents;
 
     public Integer getId() {
         return id;
@@ -102,5 +112,45 @@ public class User {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    public List<Event> getCreatedEvents() {
+        return createdEvents;
+    }
+
+    public void addCreatedEvent(Event event) {
+        if (!createdEvents.contains(event)) {
+            event.setCreatedBy(this);
+            createdEvents.add(event);
+        }
+    }
+
+    public void removeEvent(Event event) {
+        createdEvents.remove(event);
+    }
+
+    public List<Comment> getEventComments() {
+        return eventComments;
+    }
+
+    public void addEventComment(Comment comment) {
+        if (!eventComments.contains(comment)) {
+            eventComments.add(comment);
+        }
+    }
+
+    public List<Participant> getJoinedEvents() {
+        return joinedEvents;
+    }
+
+    public void addJoinedEvent(Participant participant) {
+        if (!joinedEvents.contains(participant)) {
+            joinedEvents.add(participant);
+            participant.setUser(this);
+        }
+    }
+
+    public void removeJoinedEvent(Participant participant) {
+        joinedEvents.remove(participant);
     }
 }

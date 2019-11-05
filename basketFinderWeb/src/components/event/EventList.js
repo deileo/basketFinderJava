@@ -7,6 +7,7 @@ import {withStyles} from "@material-ui/core";
 import {eventListStyles} from "../styles";
 import {connect} from "react-redux";
 import * as actions from '../../actions';
+import {ACCESS_TOKEN} from "../../config";
 
 class EventList extends Component {
 
@@ -22,11 +23,14 @@ class EventList extends Component {
     }
 
     if (!prevProps.eventReducer.reload && eventReducer.reload) {
-      let court = this.props.courtsReducer ? this.props.courtsReducer.court : null;
+      let court = courtsReducer ? courtsReducer.court : null;
+      this.props.getUserAction(localStorage.getItem(ACCESS_TOKEN));
       if (court) {
         this.props.fetchCourtById(this.props.courtsReducer.type, court.id);
+        this.props.getCourtEventsAction(court.id);
+      } else {
+        this.props.getEventsAction(this.props.courtsReducer.type);
       }
-      this.props.getEventsAction(this.props.courtsReducer.type, court ? court.id : null);
       this.props.resetEventCreationAction();
     }
   }
@@ -37,9 +41,8 @@ class EventList extends Component {
         {events.map(event => {
           return (
             <Event
-              key={event.event.id}
-              event={event.event}
-              commentsCount={event.commentsCount}
+              key={event.id}
+              event={event}
               type={this.props.courtsReducer.type}
             />
           )
@@ -48,8 +51,7 @@ class EventList extends Component {
     )
   };
 
-  renderCourtEvents = (court, classes) => {
-    const events = this.props.eventReducer.events;
+  renderCourtEvents = (court, events, classes) => {
     return (
       <div>
         <Paper className={classes.paper} elevation={1}>
@@ -100,11 +102,11 @@ class EventList extends Component {
     }
 
     let court = courtsReducer ? courtsReducer.court : null;
-    let events = eventReducer ? eventReducer.events : [];
+    let events = eventReducer && eventReducer.events ? eventReducer.events : [];
 
     return (
       <div className={classes.root}>
-        {court ? this.renderCourtEvents(court, classes) : this.renderAllEvents(events, classes)}
+        {court ? this.renderCourtEvents(court, events, classes) : this.renderAllEvents(events, classes)}
       </div>
     );
   }

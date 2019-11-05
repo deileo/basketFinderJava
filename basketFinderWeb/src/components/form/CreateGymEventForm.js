@@ -12,6 +12,7 @@ import * as actions from "../../actions";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
 import Grid from "@material-ui/core/es/Grid/Grid";
+import moment from "moment";
 
 class CreateGymEventForm extends Component {
 
@@ -20,10 +21,12 @@ class CreateGymEventForm extends Component {
     name: '',
     comment: '',
     neededPlayers: 1,
-    date: new Date(),
-    startTime: new Date(),
-    endTime: new Date(),
-    gymCourt: this.props.court.id,
+    date: moment(),
+    startTimeDate: moment(),
+    endTimeDate: moment(),
+    startTime: moment().format('YYYY-MM-DD HH:mm:00'),
+    endTime: moment().format('YYYY-MM-DD HH:mm:00'),
+    court: this.props.court.id,
   };
 
   componentDidMount() {
@@ -35,9 +38,9 @@ class CreateGymEventForm extends Component {
         price: event.price,
         comment: event.comment ? event.comment : '',
         neededPlayers: event.neededPlayers,
-        date: new Date(event.date),
-        startTime: new Date(event.date + ' ' + event.startTime),
-        endTime: new Date(event.date + ' ' + event.endTime),
+        date: moment(event.date),
+        startTimeDate: moment(event.date + ' ' + event.startTime),
+        endTimeDate: moment(event.date + ' ' + event.startTime),
       });
     }
   }
@@ -60,14 +63,18 @@ class CreateGymEventForm extends Component {
 
   handleDateChange = (date) => {
     this.setState({date: date});
+    this.setState({startTime: date.format('YYYY-MM-DD') + ' ' + this.state.startTimeDate.format('HH:mm:00')});
+    this.setState({endTime: date.format('YYYY-MM-DD') + ' ' + this.state.endTimeDate.format('HH:mm:00')});
   };
 
-  handleEndTimeChange = endTime => {
-    this.setState({endTime: endTime});
+  handleStartTimeDateChange = startTimeDate => {
+    this.setState({startTimeDate: startTimeDate});
+    this.setState({startTime: this.state.date.format('YYYY-MM-DD') + ' ' + startTimeDate.format('HH:mm:00')});
   };
 
-  handleStartTimeChange = startTime => {
-    this.setState({startTime: startTime});
+  handleEndTimeDateChange = endTimeDate => {
+    this.setState({endTimeDate: endTimeDate});
+    this.setState({endTime: this.state.date.format('YYYY-MM-DD') + ' ' + endTimeDate.format('HH:mm:00')});
   };
 
   hasError(fieldName) {
@@ -89,12 +96,12 @@ class CreateGymEventForm extends Component {
   }
 
   handleSubmit = () => {
-    this.props.createEventAction(this.state, this.props.courtsReducer.type);
+    this.props.createEventAction(this.state);
   };
 
   render() {
     const {classes, court, handleClose} = this.props;
-    const {neededPlayers, date, startTime, endTime, name, comment, price} = this.state;
+    const {neededPlayers, date, startTimeDate, endTimeDate, name, comment, price} = this.state;
 
     return (
       <div>
@@ -126,15 +133,16 @@ class CreateGymEventForm extends Component {
 
             <Grid item xs={6}>
               <FormControl margin="normal" required fullWidth>
-                <DatePicker autoOk
-                            label="Data"
-                            value={date}
-                            required={true}
-                            format="YYYY-MM-DD"
-                            disablePast
-                            error={this.hasError('date')}
-                            onChange={this.handleDateChange}
-                            variant="outlined"
+                <DatePicker
+                  autoOk
+                  label="Data"
+                  value={date}
+                  required={true}
+                  format="YYYY-MM-DD"
+                  disablePast
+                  error={this.hasError('date')}
+                  onChange={this.handleDateChange}
+                  variant="outlined"
                 />
                 {this.getErrorMessage('date')}
               </FormControl>
@@ -157,14 +165,15 @@ class CreateGymEventForm extends Component {
 
             <Grid item xs={6}>
               <FormControl margin="normal" required fullWidth>
-                <TimePicker autoOk
-                            ampm={false}
-                            label="Pradzios laikas"
-                            value={startTime}
-                            required={true}
-                            onChange={this.handleStartTimeChange}
-                            error={this.hasError('startTime')}
-                            variant="outlined"
+                <TimePicker
+                  autoOk
+                  ampm={false}
+                  label="Pradžios laikas"
+                  value={startTimeDate}
+                  required={true}
+                  onChange={this.handleStartTimeDateChange}
+                  error={this.hasError('startTime')}
+                  variant="outlined"
                 />
                 {this.getErrorMessage('startTime')}
               </FormControl>
@@ -172,14 +181,15 @@ class CreateGymEventForm extends Component {
 
             <Grid item xs={6}>
               <FormControl margin="normal" required fullWidth>
-                <TimePicker autoOk
-                            ampm={false}
-                            label="Pabaigos laikas"
-                            value={endTime}
-                            required={true}
-                            error={this.hasError('endTime')}
-                            onChange={this.handleEndTimeChange}
-                            variant="outlined"
+                <TimePicker
+                  autoOk
+                  ampm={false}
+                  label="Pabaigos laikas"
+                  value={endTimeDate}
+                  required={true}
+                  error={this.hasError('endTime')}
+                  onChange={this.handleEndTimeDateChange}
+                  variant="outlined"
                 />
                 {this.getErrorMessage('endTime')}
               </FormControl>
@@ -190,13 +200,14 @@ class CreateGymEventForm extends Component {
                 <InputLabel error={this.hasError('neededPlayers')}>
                   Reikiamas žaidėjų skaičius: {neededPlayers}
                 </InputLabel>
-                <Slider value={neededPlayers}
-                        min={1}
-                        max={10}
-                        step={1}
-                        onChange={this.handleNeededPlayersChange}
-                        style={{marginBottom: 30}}
-                        required={true}
+                <Slider
+                  value={neededPlayers}
+                  min={1}
+                  max={10}
+                  step={1}
+                  onChange={this.handleNeededPlayersChange}
+                  style={{marginBottom: 30}}
+                  required={true}
                 />
                 {this.getErrorMessage('neededPlayers')}
               </FormControl>
@@ -219,12 +230,13 @@ class CreateGymEventForm extends Component {
               </FormControl>
             </Grid>
           </Grid>
-          <Button type="button"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                  onClick={this.handleSubmit}
+          <Button
+            type="button"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={this.handleSubmit}
           >
             {this.props.event ? 'Redaguoti' : 'Sukurti'}
           </Button>

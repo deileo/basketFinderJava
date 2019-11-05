@@ -12,15 +12,10 @@ import java.io.IOException;
 @Service
 public class GeoCoderServiceImpl implements GeoCoderService {
 
+    @Autowired
     private GeoCoderContext context;
 
-    @Autowired
-    GeoCoderServiceImpl(GeoCoderContext context) {
-        this.context = context;
-    }
-
     public LatLng getGeoLocationByAddress(String address) throws InterruptedException, ApiException, IOException {
-
         GeocodingResult[] locations = GeocodingApi.geocode(context.getContext(), address).await();
 
         return locations.length > 0 ? locations[0].geometry.location : null;

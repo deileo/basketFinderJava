@@ -14,8 +14,8 @@ export const LOADING_COMMENTS_ENDED = 'loading_comments_ended';
 export const FETCH_COURTS = 'fetch_courts';
 export const FETCH_COURT = 'fetch_court';
 export const CHANGE_COURT_TYPE = 'change_court_type';
-export const TYPE_COURT = 'court';
-export const TYPE_GYM_COURT = 'gym-court';
+export const TYPE_COURT = 'public';
+export const TYPE_GYM_COURT = 'private';
 export const FETCH_ADMIN_GYM_COURTS = 'fetch-admin-gym-courts';
 export const FETCH_ADMIN_COURTS = 'fetch-admin-courts';
 export const FETCH_ADMIN_NEW_COURTS = 'fetch_admin_new_courts';
@@ -55,7 +55,6 @@ export const ENABLE_USER = 'enable_user';
 
 // participants
 export const GET_PARTICIPANTS_UNCONFIRMED = 'unconfirmed_participants';
-export const GET_EVENT_PARTICIPANTS = 'get_event_participants';
 export const ACCEPT_PARTICIPANT = 'accept_participant';
 export const CANCEL_PARTICIPANT = 'cancle_participant';
 

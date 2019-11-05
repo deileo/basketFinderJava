@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {API_URL} from "../config";
+import {ACCESS_TOKEN, API_URL} from "../config";
 
 const config = {
   headers: {
@@ -8,30 +8,24 @@ const config = {
   }
 };
 
-export function createCourtComment(commentData, court, type) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
+export function createComment(commentData) {
+  if(localStorage.getItem(ACCESS_TOKEN)) {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem(ACCESS_TOKEN);
+  }
 
-  let url = API_URL + '/comment/court/' + type + '/' + court.id + '/new';
+  let url = API_URL + '/comments/new';
 
   return axios.post(url, commentData, config);
 }
 
-export function getCourtComments(court, type) {
-  let url = API_URL + '/comment/court/' + type + '/' + court.id + '/get';
+export function getCourtComments(court) {
+  let url = API_URL + '/comments/court/' + court.id;
 
   return axios.get(url, config);
 }
 
-export function createEventComment(commentData, event, type) {
-  config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token');
-
-  let url = API_URL + '/comment/event/' + type + '/' + event.id + '/new';
-
-  return axios.post(url, commentData, config);
-}
-
-export function getEventComments(event, type) {
-  let url = API_URL + '/comment/event/' + type + '/' + event.id + '/get';
+export function getEventComments(event) {
+  let url = API_URL + '/comments/event/' + event.id;
 
   return axios.get(url, config);
 }
