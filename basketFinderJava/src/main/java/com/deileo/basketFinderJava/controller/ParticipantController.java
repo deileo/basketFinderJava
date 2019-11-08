@@ -20,19 +20,16 @@ public class ParticipantController {
     private ParticipantService participantService;
 
     @GetMapping("/{event}")
-    @ResponseBody
     public ResponseEntity<List<ParticipantDto>> getEventParticipants(Event event) {
         return ResponseEntity.ok(participantService.getEventParticipants(event));
     }
 
     @GetMapping("/unconfirmed")
-    @ResponseBody
     public ResponseEntity<List<ParticipantDto>> getUnconfirmedParticipants() {
         return ResponseEntity.ok(participantService.getUnconfirmedParticipants());
     }
 
     @PostMapping("/join/{event}")
-    @ResponseBody
     public ResponseEntity<String> joinEvent(Event event) {
         if (event.getParticipants().size() >= event.getNeededPlayers()) {
             return new ResponseEntity<>("Event is full with players!", HttpStatus.BAD_REQUEST);
@@ -44,7 +41,6 @@ public class ParticipantController {
     }
 
     @PostMapping("/leave/{event}")
-    @ResponseBody
     public ResponseEntity<String> leaveEvent(Event event) throws NotFoundException {
         participantService.leaveEvent(event);
 
@@ -52,7 +48,6 @@ public class ParticipantController {
     }
 
     @PostMapping("/accept/{event}/{user}")
-    @ResponseBody
     public ResponseEntity<String> acceptParticipant(Event event, User user) throws NotFoundException {
         participantService.acceptParticipant(event, user);
 
@@ -60,7 +55,6 @@ public class ParticipantController {
     }
 
     @PostMapping("/cancel/{event}/{user}")
-    @ResponseBody
     public ResponseEntity<String> cancelParticipant(Event event, User user) throws NotFoundException {
         participantService.removeParticipant(event, user);
 

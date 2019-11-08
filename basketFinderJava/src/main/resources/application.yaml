@@ -15,8 +15,8 @@ spring:
       client:
         registration:
           google:
-            clientId: 11221699996-itunpihiianec1vt13ngh2ku2mbfec81.apps.googleusercontent.com
-            clientSecret: vDWt2QzIUl3Cd64aMo7mQ9qs
+            clientId: googleClientId
+            clientSecret: googleClientSecret
             redirectUriTemplate: "http://localhost:8080/oauth2/callback/{registrationId}"
             scope:
               - email
@@ -24,7 +24,7 @@ spring:
 
 app:
   auth:
-    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+    tokenSecret: secretToken
     tokenExpirationMsec: 864000000
   oauth2:
     authorizedRedirectUris:
@@ -52,4 +52,4 @@ routes:
     - "/**/*.css"
     - "/**/*.js"
 
-google.api.key: AIzaSyCxcxPO50dh9UFCO70A43YI_waCAT0SFBA
+google.api.key: googleApiKey

@@ -24,19 +24,16 @@ public class CommentController {
     private ValidationUtils validation;
 
     @GetMapping ("/event/{event}")
-    @ResponseBody
     public ResponseEntity<List<CommentDto>> getEventComments(Event event) {
         return ResponseEntity.ok(commentService.getEventComments(event));
     }
 
     @GetMapping ("/court/{court}")
-    @ResponseBody
     public ResponseEntity<List<CommentDto>> getCourtComments(Court court) {
         return ResponseEntity.ok(commentService.getCourtComments(court));
     }
 
     @PostMapping("/new")
-    @ResponseBody
     public ResponseEntity<Object> newComment(@RequestBody CommentDto comment, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(validation.getErrorsMap(bindingResult), HttpStatus.BAD_REQUEST);

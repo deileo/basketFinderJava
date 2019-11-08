@@ -30,43 +30,36 @@ public class EventController {
     private ValidationUtils validation;
 
     @GetMapping()
-    @ResponseBody
     public ResponseEntity<List<EventDto>> getEvents() {
         return ResponseEntity.ok(eventService.findAll());
     }
 
     @GetMapping("/public")
-    @ResponseBody
     public ResponseEntity<List<EventDto>> getPublicEvents() {
         return ResponseEntity.ok(eventService.getEventsByCourtType(CourtType.PUBLIC));
     }
 
     @GetMapping("/private")
-    @ResponseBody
     public ResponseEntity<List<EventDto>> getPrivateEvents() {
         return ResponseEntity.ok(eventService.getEventsByCourtType(CourtType.PRIVATE));
     }
 
     @GetMapping("/court/{court}")
-    @ResponseBody
     public ResponseEntity<List<EventDto>> getCourtEvents(Court court) {
         return ResponseEntity.ok(eventService.getCourtEvents(court));
     }
 
     @GetMapping("/user")
-    @ResponseBody
     public List<Event> getUserEvents(@CurrentUser UserPrincipal user) {
         return new ArrayList<Event>();
     }
 
     @GetMapping("/user/joined/events")
-    @ResponseBody
     public List<Event> getUserJoinedEvents(@CurrentUser UserPrincipal user) {
         return new ArrayList<Event>();
     }
 
     @GetMapping("/{event}")
-    @ResponseBody
     public ResponseEntity<Event> getEvent(Event event) {
         return ResponseEntity.ok(event);
     }
