@@ -5,3 +5,4 @@ target/
 !**/src/main/**
 !**/src/test/**
 basketFinderJava.iml
+src/main/resources/application.yaml
