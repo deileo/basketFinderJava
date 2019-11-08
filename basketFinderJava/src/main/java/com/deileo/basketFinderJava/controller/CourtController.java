@@ -24,13 +24,11 @@ public class CourtController {
     private ModelMapper modelMapper;
 
     @GetMapping("/public")
-    @ResponseBody
     public ResponseEntity<List<CourtDto>> getPublicCourts() {
         return ResponseEntity.ok(courtService.getCourtsByType(CourtType.PUBLIC));
     }
 
     @GetMapping("/private")
-    @ResponseBody
     public ResponseEntity<List<CourtDto>> getPrivateCourts() {
         return ResponseEntity.ok(courtService.getCourtsByType(CourtType.PRIVATE));
     }
