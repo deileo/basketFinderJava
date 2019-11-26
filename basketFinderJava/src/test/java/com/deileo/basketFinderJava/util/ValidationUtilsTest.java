@@ -40,7 +40,6 @@ public class ValidationUtilsTest {
             assertEquals("Name", k);
             assertEquals("Cannot be blank", v.get(0));
         });
-
     }
 
     @Test

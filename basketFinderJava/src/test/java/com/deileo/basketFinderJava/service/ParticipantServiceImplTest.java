@@ -1,10 +1,10 @@
 package com.deileo.basketFinderJava.service;
 
 import com.deileo.basketFinderJava.entity.*;
+import com.deileo.basketFinderJava.exception.NotFoundException;
 import com.deileo.basketFinderJava.payload.ParticipantDto;
 import com.deileo.basketFinderJava.repository.ParticipantRepository;
 import com.deileo.basketFinderJava.repository.UserRepository;
-import javassist.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -79,7 +79,7 @@ public class ParticipantServiceImplTest {
     }
 
     @Test
-    public void testShouldDeleteEventParticipant() throws NotFoundException {
+    public void testShouldDeleteEventParticipant() {
         Event event = new Event();
         User user = new User();
         Participant participant = new Participant();
@@ -93,7 +93,7 @@ public class ParticipantServiceImplTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void testShouldThrowExceptionIfParticipantNotFoundOnLeave() throws NotFoundException {
+    public void testShouldThrowExceptionIfParticipantNotFoundOnLeave() {
         Event event = new Event();
         User user = new User();
 
@@ -105,7 +105,7 @@ public class ParticipantServiceImplTest {
     }
 
     @Test
-    public void testShouldAcceptParticipant() throws NotFoundException {
+    public void testShouldAcceptParticipant() {
         Event event = new Event();
         User user = new User();
         Participant participant = new Participant();
@@ -117,7 +117,7 @@ public class ParticipantServiceImplTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void testShouldThrowExceptionIfParticipantNotFoundOnAccept() throws NotFoundException {
+    public void testShouldThrowExceptionIfParticipantNotFoundOnAccept() {
         Event event = new Event();
         User user = new User();
 

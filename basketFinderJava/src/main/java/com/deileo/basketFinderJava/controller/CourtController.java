@@ -7,6 +7,7 @@ import com.deileo.basketFinderJava.service.CourtService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +15,18 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/courts")
+@RequestMapping(value = "/api/courts", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CourtController {
 
-    @Autowired
-    private CourtService courtService;
+    private final CourtService courtService;
+
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
+    public CourtController(CourtService courtService, ModelMapper modelMapper) {
+        this.courtService = courtService;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping("/public")
     public ResponseEntity<List<CourtDto>> getPublicCourts() {
@@ -42,13 +47,13 @@ public class CourtController {
     public ResponseEntity<String> addCourt(@Valid @RequestBody Court court) {
         courtService.save(court);
 
-        return new ResponseEntity<>("Success!", HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/delete/{court}")
+    @DeleteMapping("/delete/{court}")
     public ResponseEntity<String> deleteCourt(Court court) {
         courtService.delete(court);
 
-        return ResponseEntity.ok("Success!");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

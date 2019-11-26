@@ -30,7 +30,7 @@ public class CourtServiceImplTest {
     private ModelMapper modelMapper;
 
     @MockBean
-    private CourtRepository courtRepository;
+    private CourtRepository courtRepo;
 
     @Test
     public void testShouldReturnListOfCourts() {
@@ -40,7 +40,7 @@ public class CourtServiceImplTest {
         List<Court> courts = new ArrayList<>();
         courts.add(court);
 
-        when(courtRepository.findAll()).thenReturn(courts);
+        when(courtRepo.findAll()).thenReturn(courts);
         when(modelMapper.map(court, CourtDto.class)).thenReturn(courtDto);
 
         List<CourtDto> courtList = courtService.findAll();
@@ -53,7 +53,7 @@ public class CourtServiceImplTest {
     public void testShouldSaveCourt() {
         Court court = new Court();
 
-        when(courtRepository.save(court)).thenReturn(court);
+        when(courtRepo.save(court)).thenReturn(court);
 
         courtService.save(court);
     }
@@ -62,7 +62,7 @@ public class CourtServiceImplTest {
     public void testShouldDeleteCourt() {
         Court court = new Court();
 
-        doNothing().when(courtRepository).delete(court);
+        doNothing().when(courtRepo).delete(court);
 
         courtService.delete(court);
     }
@@ -75,7 +75,7 @@ public class CourtServiceImplTest {
         List<Court> courts = new ArrayList<>();
         courts.add(court);
 
-        when(courtRepository.getCourtsByType(CourtType.PUBLIC)).thenReturn(courts);
+        when(courtRepo.getCourtsByType(CourtType.PUBLIC)).thenReturn(courts);
         when(modelMapper.map(court, CourtDto.class)).thenReturn(courtDto);
 
         List<CourtDto> courtList = courtService.getCourtsByType(CourtType.PUBLIC);

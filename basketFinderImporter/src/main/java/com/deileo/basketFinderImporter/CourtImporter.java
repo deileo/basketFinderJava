@@ -1,14 +1,13 @@
-package com.deileo.basketFinderImporter.utils;
+package com.deileo;
 
 import com.deileo.basketFinderJava.service.CourtService;
-import com.google.maps.errors.ApiException;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
 import java.io.IOException;
 
 @Service
-public class CourtImporter {
+class CourtImporter {
 
     private static final String PUBLIC_COURTS_CSV = "data/basketballCourts.csv";
 
@@ -23,7 +22,7 @@ public class CourtImporter {
         this.courtService = courtService;
     }
 
-    public void importPublicCourts() throws IOException {
+    void importPublicCourts() throws IOException {
         FileReader file = new FileReader(ClassLoader.getSystemResource(PUBLIC_COURTS_CSV).getFile());
 
         reader.readPublicCourts(file).forEach(court -> {
@@ -32,7 +31,7 @@ public class CourtImporter {
         });
     }
 
-    public void importPrivateCourts() throws IOException {
+    void importPrivateCourts() throws IOException {
         FileReader file = new FileReader(ClassLoader.getSystemResource(PRIVATE_COURTS_CSV).getFile());
 
         reader.readPrivateCourts(file).forEach(court -> {

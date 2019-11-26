@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface CourtRepository extends JpaRepository<Court, Integer> {
 
-    @Query("SELECT c FROM Court c WHERE c.type = :type")
+    @Query("SELECT c FROM Court c WHERE c.type = :type and c.isEnabled = true")
     List<Court> getCourtsByType(@Param("type") CourtType type);
 }

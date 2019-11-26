@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -155,12 +154,12 @@ public class EventDto {
         this.unconfirmedParticipants = unconfirmedParticipants;
     }
 
-    public LocalDateTime convertStartTimeToDateTimeObject() throws ParseException {
-        return LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    public LocalDateTime convertStartTimeToDateTimeObject() {
+        return LocalDateTime.parse(startTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
-    public LocalDateTime convertEndTimeToDateTimeObject() throws ParseException {
-        return LocalDateTime.parse(endTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    public LocalDateTime convertEndTimeToDateTimeObject() {
+        return LocalDateTime.parse(endTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
     @JsonProperty("court")

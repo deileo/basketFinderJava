@@ -10,15 +10,15 @@ import java.util.List;
 
 public interface EventService {
 
-    public List<EventDto> findAll();
+    List<EventDto> findAll();
 
-    public Event find(Integer id);
+    Event find(Integer id);
 
-    public void save(EventDto event) throws ParseException;
+    void save(EventDto event);
 
-    public void delete(Event event);
+    void delete(Event event);
 
-    public List<EventDto> getCourtEvents(Court court);
+    List<EventDto> getCourtEvents(Court court);
 
-    public List<EventDto> getEventsByCourtType(CourtType type);
+    List<EventDto> getEventsByCourtType(CourtType type);
 }

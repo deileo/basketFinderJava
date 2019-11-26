@@ -32,14 +32,14 @@ public class StringLocalDateTimeFutureValidatorTest {
 
     @Test
     public void testShouldReturnFalseIfDateIsAfterCurrentDate() {
-        String yesterday = LocalDateTime.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String yesterday = LocalDateTime.now().minusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
         assertFalse(validator.isValid(yesterday, context));
     }
 
     @Test
     public void testShouldReturnTrueIfDateIsInTheFuture() {
-        String tomorrow = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String tomorrow = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
         assertTrue(validator.isValid(tomorrow, context));
     }

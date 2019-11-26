@@ -3,11 +3,8 @@ package com.deileo.basketFinderJava.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,28 +19,21 @@ public class Court extends DateAudit {
     private Integer id;
 
     @Column(nullable = false)
-    @NotBlank
     private String name;
 
     @Column(nullable = false)
-    @NotBlank
     private String address;
 
     @Column(nullable = false)
-    @NotBlank
     private String location;
 
     @Column()
     private String description;
 
     @Column(scale = 6, nullable = false)
-    @NotNull
-    @Range(min = -90, max=90)
     private Double lat;
 
     @Column(scale = 6, nullable = false)
-    @NotNull
-    @Range(min = -180, max=180)
     private Double lng;
 
     @Column(nullable = false)
@@ -53,7 +43,6 @@ public class Court extends DateAudit {
     private Boolean isNew = false;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 7)
     private CourtType type;
 
     @OneToMany(mappedBy = "court", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
@@ -64,85 +53,146 @@ public class Court extends DateAudit {
     private List<Comment> comments;
 
     public Court() {
-        events = new ArrayList<Event>();
-        comments = new ArrayList<Comment>();
+        events = new ArrayList<>();
+        comments = new ArrayList<>();
     }
 
     public Court(CourtType type) {
-        events = new ArrayList<Event>();
+        events = new ArrayList<>();
         this.type = type;
+    }
+
+    private Court(Builder builder) {
+        events = new ArrayList<>();
+        comments = new ArrayList<>();
+
+        name = builder.name;
+        address = builder.address;
+        location = builder.location;
+        description = builder.description;
+        lat = builder.lat;
+        lng = builder.lng;
+        isEnabled = builder.isEnabled;
+        isNew = builder.isNew;
+        type = builder.type;
+    }
+
+    public static class Builder {
+        private String name;
+
+        private String address;
+
+        private String location;
+
+        private String description;
+
+        private Double lat;
+
+        private Double lng;
+
+        private Boolean isEnabled = false;
+
+        private Boolean isNew = false;
+
+        private final CourtType type;
+
+        public Builder(CourtType type) {
+            this.type = type;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+
+            return this;
+        }
+
+        public Builder setAddress(String address) {
+            this.address = address;
+
+            return this;
+        }
+
+        public Builder setLocation(String location) {
+            this.location = location;
+
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+
+            return this;
+        }
+
+        public Builder setLat(Double lat) {
+            this.lat = lat;
+
+            return this;
+        }
+
+        public Builder setLng(Double lng) {
+            this.lng = lng;
+
+            return this;
+        }
+
+        public Builder enable() {
+            isEnabled = true;
+
+            return this;
+        }
+
+        public Builder disable() {
+            isEnabled = false;
+
+            return this;
+        }
+
+        public Builder setNew(Boolean isNew) {
+            this.isNew = isNew;
+
+            return this;
+        }
+
+        public Court build() {
+            return new Court(this);
+        }
     }
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getLocation() {
         return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Double getLat() {
         return lat;
-    }
-
-    public void setLat(Double lat) {
-        this.lat = lat;
     }
 
     public Double getLng() {
         return lng;
     }
 
-    public void setLng(Double lng) {
-        this.lng = lng;
-    }
-
     public Boolean getIsEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(Boolean enabled) {
-        isEnabled = enabled;
-    }
-
     public Boolean getIsNew() {
         return isNew;
-    }
-
-    public void setNew(Boolean aNew) {
-        isNew = aNew;
     }
 
     public CourtType getType() {

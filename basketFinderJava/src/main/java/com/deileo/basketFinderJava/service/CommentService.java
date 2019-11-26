@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface CommentService {
 
-    public List<CommentDto> getEventComments(Event event);
+    List<CommentDto> getEventComments(Event event);
 
-    public List<CommentDto> getCourtComments(Court court);
+    List<CommentDto> getCourtComments(Court court);
 
-    public void saveComment(CommentDto comment);
+    void saveComment(CommentDto comment);
 }

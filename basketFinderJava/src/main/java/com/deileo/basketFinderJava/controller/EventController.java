@@ -10,24 +10,28 @@ import com.deileo.basketFinderJava.service.EventService;
 import com.deileo.basketFinderJava.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping(value = "/api/events", produces = MediaType.APPLICATION_JSON_VALUE)
 public class EventController {
 
-    @Autowired
-    private EventService eventService;
+    private final EventService eventService;
+
+    private final ValidationUtils validation;
 
     @Autowired
-    private ValidationUtils validation;
+    public EventController(EventService eventService, ValidationUtils validation) {
+        this.eventService = eventService;
+        this.validation = validation;
+    }
 
     @GetMapping()
     public ResponseEntity<List<EventDto>> getEvents() {
@@ -64,21 +68,21 @@ public class EventController {
         return ResponseEntity.ok(event);
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<Object> addEvent(@Valid @RequestBody EventDto event, BindingResult bindingResult) throws ParseException {
+    @PostMapping(value = "/new", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> addEvent(@Valid @RequestBody EventDto event, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(validation.getErrorsMap(bindingResult), HttpStatus.BAD_REQUEST);
         }
 
         eventService.save(event);
 
-        return new ResponseEntity<>("Success!", HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/delete/{event}")
+    @DeleteMapping("/delete/{event}")
     public ResponseEntity<String> deleteCourt(Event event) {
         eventService.delete(event);
 
-        return ResponseEntity.ok("Success");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

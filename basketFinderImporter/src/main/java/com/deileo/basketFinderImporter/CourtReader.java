@@ -1,4 +1,4 @@
-package com.deileo.basketFinderImporter.utils;
+package com.deileo;
 
 import com.deileo.basketFinderJava.entity.Court;
 import com.deileo.basketFinderJava.entity.CourtType;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 class CourtReader {
@@ -65,26 +64,26 @@ class CourtReader {
     }
 
     private Court createPublicCourt(String[] row, LatLng geocode) {
-        return new Court.Builder(CourtType.PUBLIC)
-                .setLocation(row[1])
-                .setName(row[2])
-                .setAddress(row[2])
-                .setDescription(row[3])
-                .setLat(geocode.lat)
-                .setLng(geocode.lng)
-                .enable()
-                .build();
+        Court court = new Court(CourtType.PUBLIC);
+        court.setLocation(row[1]);
+        court.setAddress(row[2]);
+        court.setName(row[2]);
+        court.setDescription(row[3]);
+        court.setLat(geocode.lat);
+        court.setLng(geocode.lng);
+
+        return court;
     }
 
     private Court createPrivateCourt(String[] row, LatLng geocode) {
-        return new Court.Builder(CourtType.PRIVATE)
-                .setLocation(row[0])
-                .setName(row[3])
-                .setAddress(row[4])
-                .setDescription(row[7])
-                .setLat(geocode.lat)
-                .setLng(geocode.lng)
-                .enable()
-                .build();
+        Court court = new Court(CourtType.PRIVATE);
+        court.setLocation(row[0]);
+        court.setName(row[3]);
+        court.setAddress(row[4]);
+        court.setDescription(row[7]);
+        court.setLat(geocode.lat);
+        court.setLng(geocode.lng);
+
+        return court;
     }
 }

@@ -7,6 +7,7 @@ import com.deileo.basketFinderJava.service.CommentService;
 import com.deileo.basketFinderJava.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -14,26 +15,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping(value = "/api/comments", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CommentController {
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
+
+    private final ValidationUtils validation;
 
     @Autowired
-    private ValidationUtils validation;
+    public CommentController(CommentService commentService, ValidationUtils validation) {
+        this.commentService = commentService;
+        this.validation = validation;
+    }
 
-    @GetMapping ("/event/{event}")
+    @GetMapping (value = "/event/{event}")
     public ResponseEntity<List<CommentDto>> getEventComments(Event event) {
         return ResponseEntity.ok(commentService.getEventComments(event));
     }
 
-    @GetMapping ("/court/{court}")
+    @GetMapping (value = "/court/{court}")
     public ResponseEntity<List<CommentDto>> getCourtComments(Court court) {
         return ResponseEntity.ok(commentService.getCourtComments(court));
     }
 
-    @PostMapping("/new")
+    @PostMapping(value = "/new")
     public ResponseEntity<Object> newComment(@RequestBody CommentDto comment, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(validation.getErrorsMap(bindingResult), HttpStatus.BAD_REQUEST);
@@ -41,6 +46,6 @@ public class CommentController {
 
         commentService.saveComment(comment);
 
-        return new ResponseEntity<>("Success!", HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

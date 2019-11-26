@@ -13,8 +13,8 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     @Query("SELECT c FROM Comment c WHERE c.event = :event")
-    public List<Comment> getEventComments(Event event);
+    List<Comment> getEventComments(Event event);
 
     @Query("SELECT c FROM Comment c WHERE c.court = :court")
-    public List<Comment> getCourtComments(Court court);
+    List<Comment> getCourtComments(Court court);
 }

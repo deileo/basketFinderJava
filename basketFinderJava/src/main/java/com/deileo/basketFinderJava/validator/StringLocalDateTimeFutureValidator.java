@@ -16,7 +16,7 @@ public class StringLocalDateTimeFutureValidator implements ConstraintValidator<S
             return false;
         }
 
-        LocalDateTime dateTimeObject = LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime dateTimeObject = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
         return dateTimeObject.isAfter(LocalDateTime.now());
     }

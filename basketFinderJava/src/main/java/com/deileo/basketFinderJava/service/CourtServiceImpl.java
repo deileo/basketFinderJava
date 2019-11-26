@@ -9,26 +9,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class CourtServiceImpl implements CourtService {
 
-    @Autowired
-    private CourtRepository courtRepo;
+    private final CourtRepository courtRepo;
+
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private ModelMapper modelMapper;
+    public CourtServiceImpl(CourtRepository courtRepo, ModelMapper modelMapper) {
+        this.courtRepo = courtRepo;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public List<CourtDto> findAll() {
-        List<CourtDto> courts = new ArrayList<>();
-        courtRepo.findAll().forEach(court -> courts.add(convertToDto(court)));
-
-        return courts;
+        return courtRepo.findAll()
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -51,10 +55,10 @@ public class CourtServiceImpl implements CourtService {
 
     @Override
     public List<CourtDto> getCourtsByType(CourtType type) {
-        List<CourtDto> courts = new ArrayList<>();
-        courtRepo.getCourtsByType(type).forEach(court -> courts.add(convertToDto(court)));
-
-        return courts;
+        return courtRepo.getCourtsByType(type)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     private CourtDto convertToDto(Court court) {

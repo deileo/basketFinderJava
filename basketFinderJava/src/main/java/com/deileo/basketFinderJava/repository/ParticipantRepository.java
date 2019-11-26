@@ -14,8 +14,8 @@ import java.util.Optional;
 public interface ParticipantRepository extends JpaRepository<Participant, Integer> {
 
     @Query("SELECT p FROM Participant p WHERE p.event = :event AND p.user = :user")
-    public Optional<Participant> getParticipantByEventAndUser(Event event, User user);
+    Optional<Participant> getParticipantByEventAndUser(Event event, User user);
 
     @Query("SELECT p FROM Participant p INNER JOIN p.event e WHERE e.createdBy = :user AND p.isConfirmed = false")
-    public List<Participant> getUnconfirmedParticipants(User user);
+    List<Participant> getUnconfirmedParticipants(User user);
 }

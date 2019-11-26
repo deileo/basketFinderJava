@@ -21,29 +21,17 @@ import static org.mockito.Mockito.*;
 public class CookieUtilsTest {
 
     @MockBean
-    private HttpServletRequest request;
-
-    @MockBean
     private HttpServletResponse response;
 
     @Autowired
     private CookieUtils cookieUtils;
 
     @Test
-    public void testShouldReturnOptionalEmptyIfRequestCookiesAreEmpty() {
-        when(request.getCookies()).thenReturn(new Cookie[0]);
-
-        assertEquals(Optional.empty(), CookieUtils.getCookie(request, "randomName"));
-    }
-
-    @Test
     public void testShouldReturnCookieIfNameMatches() {
         Cookie cookie = new Cookie("randomName", "10");
         Cookie[] cookies = {cookie};
 
-        when(request.getCookies()).thenReturn(cookies);
-
-        assertEquals(Optional.of(cookie), CookieUtils.getCookie(request, "randomName"));
+        assertEquals(Optional.of(cookie), CookieUtils.getCookie(cookies, "randomName"));
     }
 
     @Test
@@ -51,9 +39,7 @@ public class CookieUtilsTest {
         Cookie cookie = new Cookie("badName", "10");
         Cookie[] cookies = {cookie};
 
-        when(request.getCookies()).thenReturn(cookies);
-
-        assertEquals(Optional.empty(), CookieUtils.getCookie(request, "randomName"));
+        assertEquals(Optional.empty(), CookieUtils.getCookie(cookies, "randomName"));
     }
 
     @Test
@@ -64,24 +50,13 @@ public class CookieUtilsTest {
     }
 
     @Test
-    public void testShouldNotDeleteCookieIfCookiesAreEmpty() {
-        when(request.getCookies()).thenReturn(new Cookie[0]);
-
-        verify(response, never()).addCookie(any());
-
-        CookieUtils.deleteCookie(request, response, "randomName");
-    }
-
-    @Test
     public void testShouldNotDeleteCookieIfCookiesNameIsNotFound() {
         Cookie cookie = new Cookie("badName", "10");
         Cookie[] cookies = {cookie};
 
-        when(request.getCookies()).thenReturn(cookies);
-
         verify(response, never()).addCookie(any());
 
-        CookieUtils.deleteCookie(request, response, "randomName");
+        CookieUtils.deleteCookie(cookies, response, "randomName");
     }
 
     @Test
@@ -89,10 +64,8 @@ public class CookieUtilsTest {
         Cookie cookie = new Cookie("randomName", "10");
         Cookie[] cookies = {cookie};
 
-        when(request.getCookies()).thenReturn(cookies);
-
         doNothing().when(response).addCookie(any());
 
-        CookieUtils.deleteCookie(request, response, "randomName");
+        CookieUtils.deleteCookie(cookies, response, "randomName");
     }
 }

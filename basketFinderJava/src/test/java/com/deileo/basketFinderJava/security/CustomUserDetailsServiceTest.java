@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class CustomUserDetailsServiceTest {
 
     @MockBean
-    private UserRepository userRepository;
+    private UserRepository userRepo;
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
@@ -33,7 +33,7 @@ public class CustomUserDetailsServiceTest {
         user.setEmail("email@email.com");
         user.setPassword("Password");
 
-        when(userRepository.findByEmail("email@email.com")).thenReturn(Optional.of(user));
+        when(userRepo.findByEmail("email@email.com")).thenReturn(Optional.of(user));
 
         UserDetails userDetails = userDetailsService.loadUserByUsername("email@email.com");
 
@@ -43,7 +43,7 @@ public class CustomUserDetailsServiceTest {
 
     @Test(expected = UsernameNotFoundException.class)
     public void testShouldThrowExceptionIfUserIsNotFound() {
-        when(userRepository.findByEmail("email@email.com")).thenReturn(Optional.empty());
+        when(userRepo.findByEmail("email@email.com")).thenReturn(Optional.empty());
 
         userDetailsService.loadUserByUsername("email@email.com");
     }
@@ -54,7 +54,7 @@ public class CustomUserDetailsServiceTest {
         user.setEmail("email@email.com");
         user.setPassword("Password");
 
-        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        when(userRepo.findById(1)).thenReturn(Optional.of(user));
 
         UserDetails userDetails = userDetailsService.loadUserById(1);
 
@@ -64,7 +64,7 @@ public class CustomUserDetailsServiceTest {
 
     @Test(expected = ResourceNotFoundException.class)
     public void testShouldThrowExceptionIfUserIsNotFoundById() {
-        when(userRepository.findById(1)).thenReturn(Optional.empty());
+        when(userRepo.findById(1)).thenReturn(Optional.empty());
 
         userDetailsService.loadUserById(1);
     }

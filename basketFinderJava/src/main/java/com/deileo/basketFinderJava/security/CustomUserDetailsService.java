@@ -11,24 +11,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class CustomUserDetailsService implements UserDetailsService {
 
+    private final UserRepository userRepo;
+
     @Autowired
-    private UserRepository userRepository;
+    public CustomUserDetailsService(UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElseThrow(() ->
+        User user = userRepo.findByEmail(email).orElseThrow(() ->
                 new UsernameNotFoundException("User not found with email : " + email)
             );
 
         return UserPrincipal.create(user);
     }
 
-    @Transactional
     public UserDetails loadUserById(Integer id) {
-        User user = userRepository.findById(id).orElseThrow(
+        User user = userRepo.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("User", "id", id)
         );
 

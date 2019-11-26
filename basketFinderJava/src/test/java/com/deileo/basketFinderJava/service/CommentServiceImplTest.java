@@ -30,7 +30,7 @@ public class CommentServiceImplTest {
     private ModelMapper modelMapper;
 
     @MockBean
-    private CommentRepository commentRepository;
+    private CommentRepository userRepo;
 
     @Test
     public void testShouldReturnEventComments() {
@@ -41,7 +41,7 @@ public class CommentServiceImplTest {
         List<Comment> comments = new ArrayList<>();
         comments.add(comment);
 
-        when(commentRepository.getEventComments(event)).thenReturn(comments);
+        when(userRepo.getEventComments(event)).thenReturn(comments);
         when(modelMapper.map(comment, CommentDto.class)).thenReturn(commentDto);
 
         List<CommentDto> commentsList = commentService.getEventComments(event);
@@ -59,7 +59,7 @@ public class CommentServiceImplTest {
         List<Comment> comments = new ArrayList<>();
         comments.add(comment);
 
-        when(commentRepository.getCourtComments(court)).thenReturn(comments);
+        when(userRepo.getCourtComments(court)).thenReturn(comments);
         when(modelMapper.map(comment, CommentDto.class)).thenReturn(commentDto);
 
         List<CommentDto> commentsList = commentService.getCourtComments(court);
@@ -74,7 +74,7 @@ public class CommentServiceImplTest {
         Comment comment = createComment("New comment!");
 
         when(modelMapper.map(commentDto, Comment.class)).thenReturn(comment);
-        when(commentRepository.save(comment)).thenReturn(comment);
+        when(userRepo.save(comment)).thenReturn(comment);
 
         commentService.saveComment(commentDto);
     }

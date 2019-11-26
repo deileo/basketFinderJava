@@ -68,7 +68,7 @@ public class EventServiceImplTest {
     public void testShouldSaveEvent() throws ParseException {
         Event event = new Event();
         EventDto eventDto = new EventDto();
-        eventDto.setStartTime("2019-01-01 18:00:00");
+        eventDto.setStartTime("2019-01-01T18:00:00");
 
         when(modelMapper.map(eventDto, Event.class)).thenReturn(event);
         when(eventRepo.save(event)).thenReturn(event);

@@ -10,9 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableConfigurationProperties(AppProperties.class)
 @EnableJpaAuditing
 public class BasketFinderJavaApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(BasketFinderJavaApplication.class, args);
 	}
-
 }

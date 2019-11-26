@@ -9,26 +9,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
 public class EventServiceImpl implements EventService {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
+
+    private final EventRepository eventRepo;
 
     @Autowired
-    private EventRepository eventRepo;
+    public EventServiceImpl(ModelMapper modelMapper, EventRepository eventRepo) {
+        this.modelMapper = modelMapper;
+        this.eventRepo = eventRepo;
+    }
 
     @Override
     public List<EventDto> findAll() {
-        List<EventDto> events = new ArrayList<>();
-        eventRepo.findAll().forEach(event -> events.add(convertToDto(event)));
-
-        return events;
+        return eventRepo.findAll()
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -37,7 +40,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void save(EventDto event) throws ParseException {
+    public void save(EventDto event) {
         eventRepo.save(convertToEntity(event));
     }
 
@@ -48,21 +51,21 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventDto> getCourtEvents(Court court) {
-        List<EventDto> events = new ArrayList<>();
-        eventRepo.getCourtEvents(court).forEach(event -> events.add(convertToDto(event)));
-
-        return events;
+        return eventRepo.getCourtEvents(court)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<EventDto> getEventsByCourtType(CourtType type) {
-        List<EventDto> events = new ArrayList<>();
-        eventRepo.getEventsByCourtType(type).forEach(event -> events.add(convertToDto(event)));
-
-        return events;
+        return eventRepo.getEventsByCourtType(type)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    private Event convertToEntity(EventDto eventDto) throws ParseException {
+    private Event convertToEntity(EventDto eventDto) {
         Event event = modelMapper.map(eventDto, Event.class);
 
         event.setStartTime(eventDto.convertStartTimeToDateTimeObject());
@@ -93,24 +96,18 @@ public class EventServiceImpl implements EventService {
     }
 
     private List<ParticipantDto> getConfirmedParticipantsList(Event event) {
-        List<ParticipantDto> participantDtos = new ArrayList<>();
-        event.getParticipants().forEach(participant -> {
-            if (participant.getConfirmed()) {
-                participantDtos.add(modelMapper.map(participant.getUser(), ParticipantDto.class));
-            }
-        });
-
-        return participantDtos;
+        return event.getParticipants()
+                .stream()
+                .filter(Participant::getConfirmed)
+                .map(p -> modelMapper.map(p.getUser(), ParticipantDto.class))
+                .collect(Collectors.toList());
     }
 
     private List<ParticipantDto> getUnconfirmedParticipantsList(Event event) {
-        List<ParticipantDto> participantDtos = new ArrayList<>();
-        event.getParticipants().forEach(participant -> {
-            if (!participant.getConfirmed()) {
-                participantDtos.add(modelMapper.map(participant.getUser(), ParticipantDto.class));
-            }
-        });
-
-        return participantDtos;
+        return event.getParticipants()
+                .stream()
+                .filter(p -> !p.getConfirmed())
+                .map(p -> modelMapper.map(p.getUser(), ParticipantDto.class))
+                .collect(Collectors.toList());
     }
 }

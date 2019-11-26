@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface CourtService {
 
-    public List<CourtDto> findAll();
+    List<CourtDto> findAll();
 
-    public CourtDto find(Integer id);
+    CourtDto find(Integer id);
 
-    public void save(Court court);
+    void save(Court court);
 
-    public void delete(Court court);
+    void delete(Court court);
 
-    public List<CourtDto> getCourtsByType(CourtType type);
+    List<CourtDto> getCourtsByType(CourtType type);
 }

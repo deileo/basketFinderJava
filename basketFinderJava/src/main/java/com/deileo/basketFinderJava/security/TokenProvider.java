@@ -14,7 +14,7 @@ public class TokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
-    private AppProperties appProperties;
+    private final AppProperties appProperties;
 
     public TokenProvider(AppProperties appProperties) {
         this.appProperties = appProperties;
@@ -46,6 +46,7 @@ public class TokenProvider {
     public boolean validateToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
+
             return true;
         } catch (SignatureException ex) {
             logger.error("Invalid JWT signature");
@@ -58,6 +59,7 @@ public class TokenProvider {
         } catch (IllegalArgumentException ex) {
             logger.error("JWT claims string is empty.");
         }
+
         return false;
     }
 }

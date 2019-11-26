@@ -4,10 +4,10 @@ import com.deileo.basketFinderJava.entity.CourtType;
 import com.deileo.basketFinderJava.entity.Event;
 import com.deileo.basketFinderJava.entity.Participant;
 import com.deileo.basketFinderJava.entity.User;
+import com.deileo.basketFinderJava.exception.NotFoundException;
 import com.deileo.basketFinderJava.payload.ParticipantDto;
 import com.deileo.basketFinderJava.repository.ParticipantRepository;
 import com.deileo.basketFinderJava.repository.UserRepository;
-import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,40 +15,44 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class ParticipantServiceImpl implements ParticipantService {
 
-    @Autowired
-    private ParticipantRepository participantRepo;
+    private final ParticipantRepository participantRepo;
+
+    private final ModelMapper modelMapper;
+
+    private final UserRepository userRepo;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private UserRepository userRepository;
+    public ParticipantServiceImpl(
+            ParticipantRepository participantRepo,
+            ModelMapper modelMapper,
+            UserRepository userRepo
+    ) {
+        this.participantRepo = participantRepo;
+        this.modelMapper = modelMapper;
+        this.userRepo = userRepo;
+    }
 
     @Override
     public List<ParticipantDto> getEventParticipants(Event event) {
-        List<ParticipantDto> participants = new ArrayList<>();
-        event.getParticipants().forEach(participant -> participants.add(convertToDto(participant.getUser())));
-
-        return participants;
+        return event.getParticipants()
+                .stream()
+                .map(p -> convertToDto(p.getUser()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<ParticipantDto> getUnconfirmedParticipants() {
-        List<ParticipantDto> participants = new ArrayList<>();
-
-        participantRepo.getUnconfirmedParticipants(getCurrentUser()).forEach(participant -> {
-            Event event = participant.getEvent();
-            participants.add(convertToDto(participant.getUser(), event.getName(), event.getId()));
-        });
-
-        return participants;
+        return participantRepo.getUnconfirmedParticipants(getCurrentUser())
+                .stream()
+                .map(p -> convertToDto(p.getUser(), p.getEvent().getName(), p.getEvent().getId()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -59,7 +63,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public void leaveEvent(Event event) throws NotFoundException {
+    public void leaveEvent(Event event) {
         Participant participant = participantRepo.getParticipantByEventAndUser(event, getCurrentUser()).orElseThrow(
             () -> new NotFoundException("Participant not found")
         );
@@ -68,7 +72,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public void acceptParticipant(Event event, User user) throws NotFoundException {
+    public void acceptParticipant(Event event, User user) {
         Participant participant = participantRepo.getParticipantByEventAndUser(event, user).orElseThrow(
             () -> new NotFoundException("Participant not found")
         );
@@ -79,7 +83,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public void removeParticipant(Event event, User user) throws NotFoundException {
+    public void removeParticipant(Event event, User user) {
         Participant participant = participantRepo.getParticipantByEventAndUser(event, user).orElseThrow(
             () -> new NotFoundException("Participant not found")
         );
@@ -102,6 +106,6 @@ public class ParticipantServiceImpl implements ParticipantService {
     private User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return userRepository.findByEmail(auth.getName()).orElse(null);
+        return userRepo.findByEmail(auth.getName()).orElse(null);
     }
 }

@@ -29,42 +29,41 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @ConfigurationProperties(prefix = "routes")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService userDetailsService;
+
+    private final CustomOAuth2UserService oAuth2UserService;
+
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+
+    private final TokenAuthenticationFilter tokenAuthenticationFilter;
+
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepo;
 
     @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
-
-    @Autowired
-    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-
-    @Autowired
-    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-
-    @Autowired
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    public SecurityConfig(
+            CustomUserDetailsService userDetailsService,
+            CustomOAuth2UserService oAuth2UserService,
+            OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler,
+            OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler,
+            TokenAuthenticationFilter tokenAuthenticationFilter,
+            HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepo
+    ) {
+        this.userDetailsService = userDetailsService;
+        this.oAuth2UserService = oAuth2UserService;
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
+        this.oAuth2AuthenticationFailureHandler = oAuth2AuthenticationFailureHandler;
+        this.tokenAuthenticationFilter = tokenAuthenticationFilter;
+        this.httpCookieOAuth2AuthorizationRequestRepo = httpCookieOAuth2AuthorizationRequestRepo;
+    }
 
     private String[] publicRoutes;
-
-    @Bean
-    public TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter();
-    }
-
-    /*
-      By default, Spring OAuth2 uses HttpSessionOAuth2AuthorizationRequestRepository to save
-      the authorization request. But, since our service is stateless, we can't save it in
-      the session. We'll save the request in a Base64 encoded cookie instead.
-    */
-    @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
-        return new HttpCookieOAuth2AuthorizationRequestRepository();
-    }
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
-            .userDetailsService(customUserDetailsService)
+            .userDetailsService(userDetailsService)
             .passwordEncoder(passwordEncoder());
     }
 
@@ -106,19 +105,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .oauth2Login()
                 .authorizationEndpoint()
                     .baseUri("/oauth2/authorize")
-                    .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+                    .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepo)
                     .and()
                 .redirectionEndpoint()
                     .baseUri("/oauth2/callback/*")
                     .and()
                 .userInfoEndpoint()
-                    .userService(customOAuth2UserService)
+                    .userService(oAuth2UserService)
                     .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler)
                 .failureHandler(oAuth2AuthenticationFailureHandler);
 
         // Add our custom Token based authentication filter
-        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     public void setPublicRoutes(String[] publicRoutes) {

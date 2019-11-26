@@ -14,8 +14,8 @@ import java.util.List;
 public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("SELECT e FROM Event e WHERE e.court = :court")
-    public List<Event> getCourtEvents(Court court);
+    List<Event> getCourtEvents(Court court);
 
     @Query("SELECT e FROM Event e INNER JOIN e.court c WHERE c.type = :type")
-    public List<Event> getEventsByCourtType(@Param("type") CourtType type);
+    List<Event> getEventsByCourtType(@Param("type") CourtType type);
 }
