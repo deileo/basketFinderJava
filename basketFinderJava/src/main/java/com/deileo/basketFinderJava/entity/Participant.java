@@ -1,10 +1,11 @@
 package com.deileo.basketFinderJava.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="event_participants")
-public class Participant {
+public class Participant implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

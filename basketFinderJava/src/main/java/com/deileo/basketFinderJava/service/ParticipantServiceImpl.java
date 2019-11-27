@@ -28,15 +28,19 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private final UserRepository userRepo;
 
+    private final RabbitService rabbit;
+
     @Autowired
     public ParticipantServiceImpl(
             ParticipantRepository participantRepo,
             ModelMapper modelMapper,
-            UserRepository userRepo
+            UserRepository userRepo,
+            RabbitService rabbit
     ) {
         this.participantRepo = participantRepo;
         this.modelMapper = modelMapper;
         this.userRepo = userRepo;
+        this.rabbit = rabbit;
     }
 
     @Override
@@ -57,9 +61,15 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     @Override
     public void joinEvent(Event event) {
-        Boolean isConfirmed = event.getCourt().getType().equals(CourtType.PUBLIC) || event.getCreatedBy().equals(getCurrentUser());
+        final Boolean isConfirmed = event.getCourt().getType().equals(CourtType.PUBLIC) || event.getCreatedBy().equals(getCurrentUser());
+        final User user = getCurrentUser();
+        final Participant participant = new Participant(event, user, isConfirmed);
 
-        participantRepo.save(new Participant(event, getCurrentUser(), isConfirmed));
+        participantRepo.save(participant);
+
+        if (!user.equals(event.getCreatedBy())) {
+            rabbit.convertAndSend("participant.joined", participant);
+        }
     }
 
     @Override

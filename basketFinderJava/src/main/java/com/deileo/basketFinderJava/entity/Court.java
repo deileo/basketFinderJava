@@ -159,6 +159,10 @@ public class Court extends DateAudit {
         }
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

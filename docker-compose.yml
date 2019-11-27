@@ -37,6 +37,17 @@ services:
     networks:
       - app-tier
 
+  rabbitmq:
+    image: bitnami/rabbitmq:latest
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      - RABBITMQ_USERNAME=basketFinder
+      - RABBITMQ_PASSWORD=basketFinder
+    networks:
+      - app-tier
+
 networks:
   app-tier:
     driver: bridge
